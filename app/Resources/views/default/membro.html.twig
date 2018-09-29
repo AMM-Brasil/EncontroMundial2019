@@ -1,0 +1,54 @@
+<div class="card" data-index="{{ index }}">
+    <div class="card-header" id="card_heading_{{ index }}">
+        <h5 class="mb-0">
+            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_{{ index }}" id="nome_{{index}}_heading">
+                {{ membro.nome }}
+            </button>
+        </h5>
+    </div>
+
+    <div id="collapse_{{ index }}" class="collapse {% if membro.id is empty %}show{% endif %}" data-parent="#listaMembros">
+        <div class="card-body">
+            <div class="form-group">
+                <label for="nome_{{ index }}">Nome:</label>
+                <input type="text" name="membro[{{ index }}][nome]" id="nome_{{ index }}" class="form-control membro-nome" required value="{{ membro.nome }}">
+            </div>
+            <div class="form-group">
+                <label for="veiculo_{{ index }}">Tipo de veículo:</label>
+                <select name="membro[{{ index }}][veiculo]" id="veiculo_{{ index }}" class="form-control" required>
+                    <option value="MOTO"   {% if membro.veiculo == 'MOTO' %}selected="selected"{% endif %}>Motocicleta</option>
+                    <option value="CARRO"  {% if membro.veiculo == 'CARRO' %}selected="selected"{% endif %}>Carro</option>
+                    <option value="GARUPA" {% if membro.veiculo == 'GARUPA' %}selected="selected"{% endif %}>Garupa/Passageiro</option>
+                    <option value="SEM"    {% if membro.veiculo == 'SEM' %}selected="selected"{% endif %}>Rodoviário/Aéreo (sem veículo)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="estadia_{{ index }}">Tipo de estadia:</label>
+                <select name="membro[{{ index }}][estadia]" id="estadia_{{ index }}" class="form-control" required>
+                    <option value="CATRE"   {% if membro.estadia == 'CATRE' %}selected="selected"{% endif %}>CATRE</option>
+                    <option value="CAMPING" {% if membro.estadia == 'CAMPING' %}selected="selected"{% endif %}>Camping</option>
+                    <option value="HOTEL"   {% if membro.estadia == 'HOTEL' %}selected="selected"{% endif %}>Hotel</option>
+                    <option value="CASA"    {% if membro.estadia == 'CASA' %}selected="selected"{% endif %}>Casa (própria ou de amigos)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="camiseta_{{ index }}">Tamanho da camiseta:</label>
+                <select name="membro[{{ index }}][camiseta]" id="camiseta_{{ index }}" class="form-control" required>
+                    <option value="P"    {% if membro.camiseta == 'P'    %}selected="selected"{% endif %}>P</option>
+                    <option value="M"    {% if membro.camiseta == 'M'    %}selected="selected"{% endif %}>M</option>
+                    <option value="G"    {% if membro.camiseta == 'G'    %}selected="selected"{% endif %}>G</option>
+                    <option value="GG"   {% if membro.camiseta == 'GG'   %}selected="selected"{% endif %}>GG</option>
+                    <option value="XG"   {% if membro.camiseta == 'XG'   %}selected="selected"{% endif %}>XG</option>
+                    <option value="XXG"  {% if membro.camiseta == 'XXG'  %}selected="selected"{% endif %}>XXG</option>
+                    <option value="XXXG" {% if membro.camiseta == 'XXXG' %}selected="selected"{% endif %}>XXXG</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="calcado_{{ index }}">Número do calçado (chinelo de dedo):</label>
+                <input type="number" name="membro[{{ index }}][calcado]" id="calcado_{{ index }}" class="form-control" required value="{{ membro.calcado }}">
+            </div>
+            <input type="hidden" id="membro_id_{{ index }}" name="membro[{{ index }}][id]" value="{{ membro.id }}">
+            <p class="text-right"><a href="#" onclick="removerMembro({{ index }}, {{ membro.id }})" class="text-danger btn-sm"><i class="fas fa-trash"></i> Excluir</a></p>
+        </div>
+    </div>
+</div> 

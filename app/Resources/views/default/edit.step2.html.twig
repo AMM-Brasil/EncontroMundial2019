@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block inscricao %}{{ inscricao.id }}{% endblock %}
+
+{% block progresso %}25%{% endblock %}
+
+{% block body %}
+    <form action="{{ path('do-edit-step-2', {'inscricao': inscricao.id}) }}" method="POST">
+        <fieldset>
+            <legend>Membros <a href="#" onclick="adicionarMembro()" id="adicionarMembro" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Adicionar</a></legend>
+            <p>Não se esqueça de incluir o Diretor nesta lista!</p>
+
+            <div class="accordion" id="listaMembros">
+                {% for membro in inscricao.membros %}
+                    {% include 'default/membro.html.twig' with {'membro': membro, 'index': loop.index0} %}
+                {% endfor %}
+            </div>
+        </fieldset><br>
+        <input type="hidden" id="currentIndex" value="{{ inscricao.membros|length }}">
+        <p>
+            <a href="{{ path('edit-step-1', {'id': inscricao.id }) }}" class="btn btn-secondary"><i class="fas fa-chevron-left"></i> Anterior</a> 
+            <button type="submit" class="btn btn-success float-right" disabled id="proximo">Próximo <i class="fas fa-chevron-right"></i></button>
+        </p>                
+    </form>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        function adicionarMembro() {
+            $('.collapse').removeClass('show');
+            $.get('{{ path('adicionar-membro') }}', {index: $('#currentIndex').val()}, function (data) {
+                $('#listaMembros').prepend(data);
+                $('#currentIndex').val(parseInt($('#currentIndex').val()) + 1);
+                ativarMudancaNome();
+                ativarBotaoProximo();
+            });
+        }
+
+        function removerMembro(indexLista, membroId) {
+            if (confirm('Deseja realmente excluir o membro selecionado?')) {
+                $.get('{{ path('remover-membro') }}', {id: membroId});
+                $('.card[data-index=' + indexLista + ']').remove();
+                $('#currentIndex').val(parseInt($('#currentIndex').val()) - 1);
+                ativarBotaoProximo();
+            }
+        }
+
+        function ativarMudancaNome() {
+            $('.membro-nome').keyup(function () {
+                $('#' + $(this).attr('id') + '_heading').html($(this).val());
+            });
+        }
+
+        function ativarBotaoProximo() {
+            $('#proximo').attr('disabled', parseInt($('#currentIndex').val()) == 0)
+        }
+
+        $(function () {
+            ativarMudancaNome();
+            ativarBotaoProximo();
+        });
+    </script>
+{% endblock %}

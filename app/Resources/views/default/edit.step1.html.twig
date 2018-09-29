@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block inscricao %}{{ inscricao.id }}{% endblock %}
+
+{% block progresso %}0%{% endblock %}
+
+{% block body %}
+    <form action="{{ path('do-edit-step-1', {'id': inscricao.id}) }}" method="POST">
+        <fieldset>
+            <legend>Dados da Regional</legend>
+            <div class="form-group">
+                <label for="cidade">Cidade:</label>
+                <input type="text" class="form-control" name="cidade" id="cidade" required="required" value="{{ inscricao.cidade }}">
+            </div>
+            <div class="form-group">
+                <label for="uf">Estado:</label>
+                <select name="uf" class="form-control" id="uf" required="required">
+                    <option value="AC" {% if inscricao.uf == 'AC' %}selected="selected"{% endif %}>Acre</option>
+                    <option value="AL" {% if inscricao.uf == 'AL' %}selected="selected"{% endif %}>Alagoas</option>
+                    <option value="AP" {% if inscricao.uf == 'AP' %}selected="selected"{% endif %}>Amapá</option>
+                    <option value="AM" {% if inscricao.uf == 'AM' %}selected="selected"{% endif %}>Amazonas</option>
+                    <option value="BA" {% if inscricao.uf == 'BA' %}selected="selected"{% endif %}>Bahia</option>
+                    <option value="CE" {% if inscricao.uf == 'CE' %}selected="selected"{% endif %}>Ceará</option>
+                    <option value="DF" {% if inscricao.uf == 'DF' %}selected="selected"{% endif %}>Distrito Federal</option>
+                    <option value="ES" {% if inscricao.uf == 'ES' %}selected="selected"{% endif %}>Espírito Santo</option>
+                    <option value="GO" {% if inscricao.uf == 'GO' %}selected="selected"{% endif %}>Goiás</option>
+                    <option value="MA" {% if inscricao.uf == 'MA' %}selected="selected"{% endif %}>Maranhão</option>
+                    <option value="MT" {% if inscricao.uf == 'MT' %}selected="selected"{% endif %}>Mato Grosso</option>
+                    <option value="MS" {% if inscricao.uf == 'MS' %}selected="selected"{% endif %}>Mato Grosso do Sul</option>
+                    <option value="MG" {% if inscricao.uf == 'MG' %}selected="selected"{% endif %}>Minas Gerais</option>
+                    <option value="PA" {% if inscricao.uf == 'PA' %}selected="selected"{% endif %}>Pará</option>
+                    <option value="PB" {% if inscricao.uf == 'PB' %}selected="selected"{% endif %}>Paraíba</option>
+                    <option value="PR" {% if inscricao.uf == 'PR' %}selected="selected"{% endif %}>Paraná</option>
+                    <option value="PE" {% if inscricao.uf == 'PE' %}selected="selected"{% endif %}>Pernambuco</option>
+                    <option value="PI" {% if inscricao.uf == 'PI' %}selected="selected"{% endif %}>Piauí</option>
+                    <option value="RJ" {% if inscricao.uf == 'RJ' %}selected="selected"{% endif %}>Rio de Janeiro</option>
+                    <option value="RN" {% if inscricao.uf == 'RN' %}selected="selected"{% endif %}>Rio Grande do Norte</option>
+                    <option value="RS" {% if inscricao.uf == 'RS' %}selected="selected"{% endif %}>Rio Grande do Sul</option>
+                    <option value="RO" {% if inscricao.uf == 'RO' %}selected="selected"{% endif %}>Rondônia</option>
+                    <option value="RR" {% if inscricao.uf == 'RR' %}selected="selected"{% endif %}>Roraima</option>
+                    <option value="SC" {% if inscricao.uf == 'SC' %}selected="selected"{% endif %}>Santa Catarina</option>
+                    <option value="SP" {% if inscricao.uf == 'SP' %}selected="selected"{% endif %}>São Paulo</option>
+                    <option value="SE" {% if inscricao.uf == 'SE' %}selected="selected"{% endif %}>Sergipe</option>
+                    <option value="TO" {% if inscricao.uf == 'TO' %}selected="selected"{% endif %}>Tocantins</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="diretor">Nome do Diretor Regional:</label>
+                <input type="text" class="form-control" name="diretor" id="diretor" required="required" value="{{ inscricao.diretor }}">
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail do Diretor:</label>
+                <input type="email" class="form-control" name="email" id="email" required="required" value="{{ inscricao.email }}">
+            </div>
+        </fieldset>
+        <p class="text-right"><button type="submit" class="btn btn-success">Próximo <i class="fas fa-chevron-right"></i></button></p>                
+    </form>
+{% endblock %}

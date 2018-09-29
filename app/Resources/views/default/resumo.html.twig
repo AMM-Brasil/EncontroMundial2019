@@ -1,0 +1,167 @@
+{% extends 'base.html.twig' %}
+
+{% block inscricao %}{{ inscricao.id }}{% endblock %}
+
+{% block progresso %}100%{% endblock %}
+
+{% block body %}
+    <h2 class="text-center">Resumo da Inscrição</h2>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Dados da Regional
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-sm">
+                            <b>Cidade:</b> {{ inscricao.cidade }}
+                        </div>
+                        <div class="col-12 col-sm">
+                            <b>Estado:</b> {{ inscricao.uf }}
+                        </div>
+                        <div class="col-12 col-sm">
+                            <b>Diretor:</b> {{ inscricao.diretor }}
+                        </div>
+                        <div class="col-12 col-sm">
+                            <b>Diretor:</b> {{ inscricao.email }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><br>
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Financeiro
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Qnt.</th>
+                                <th>R$/u</th>
+                                <th>R$</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Inscrições</td>
+                                <td>{{ inscricao.membros|length }}</td>
+                                <td>{{ custoInscricao }},00</td>
+                                <td>{{ totalInscricoes }},00</td>
+                            </tr>
+                            <tr>
+                                <td>Camisetas avulsas</td>
+                                <td>{{ camisetasAvulsas }}</td>
+                                <td>{{ custoCamiseta }}</td>
+                                <td>{{ totalCamisetas }},00</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3"><b>Total</b></td>
+                                <td><b>{{ totalInscricoes + totalCamisetas }},00</b></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    {% if inscricao.depositoIdentificado %}
+                        <div class="alert alert-success">
+                            Depósito identificado!
+                        </div>
+                    {% else %}
+                        <div class="alert alert-danger">
+                            Depósito não identificado até o momento.
+                        </div>
+                        <div class="alert alert-info">
+                            <p>Realize depósito identificado na conta do AMM e envie o comprovante para <b>secretaria@amm-brasil.org</b>:</p>
+                            <p class="text-center"><b>Banco Itaú</b><br><b>Agência:</b> xxxx<br><b>Conta corrente:</b> xxxxx</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div><br>
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Membros inscritos
+                </div>
+                {% for membro in inscricao.membros %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ membro.nome }}</h5>
+                        <div class="card-text row">
+                            <div class="col-12 col-sm">
+                                <b>Veículo:</b> {{ membro.veiculo }}
+                            </div>
+                            <div class="col-12 col-sm">
+                                <b>Estadia:</b> {{ membro.estadia }}
+                            </div>
+                            <div class="col-12 col-sm">
+                                <b>Camiseta:</b> {{ membro.camiseta }}
+                            </div>
+                            <div class="col-12 col-sm">
+                                <b>Calçado:</b> N° {{ membro.calcado }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div><br>
+    
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Camisetas avulsas
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 col-sm-2">
+                            <b>Infantil P:</b> {{ inscricao.camisetasAvulsasInfantilP }}
+                        </div>
+                        <div class="col-6 col-sm-2">
+                            <b>Infantil M:</b> {{ inscricao.camisetasAvulsasInfantilM }}
+                        </div>
+                        <div class="col-6 col-sm-2">
+                            <b>Infantil G:</b> {{ inscricao.camisetasAvulsasInfantilG }}
+                        </div>
+                        <div class="col-6 col-sm-2">
+                            <b>P:</b> {{ inscricao.camisetasAvulsasP }}
+                        </div>
+                        <div class="col-6 col-sm-2">
+                            <b>M:</b> {{ inscricao.camisetasAvulsasM }}
+                        </div>
+                        <div class="col-6 col-sm-2">
+                            <b>G:</b> {{ inscricao.camisetasAvulsasG }}
+                        </div>
+                        <div class="col-6 col-sm-2">
+                            <b>GG:</b> {{ inscricao.camisetasAvulsasGG }}
+                        </div>
+                        <div class="col-6 col-sm-2">
+                            <b>XG:</b> {{ inscricao.camisetasAvulsasXG }}
+                        </div>
+                        <div class="col-6 col-sm-2">
+                            <b>XXG:</b> {{ inscricao.camisetasAvulsasXXG }}
+                        </div>
+                        <div class="col-6 col-sm-2">
+                            <b>XXXG:</b> {{ inscricao.camisetasAvulsasXXXG }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>
+        <br>
+        <a href="{{ path('edit-step-1', {'id': inscricao.id }) }}" class="btn btn-secondary"><i class="fas fa-edit"></i> Editar inscrição</a> 
+        <a href="{{ path('homepage') }}" class="btn btn-primary float-right"><i class="fas fa-home"></i> Voltar ao início</a>
+    </p>
+{% endblock %}
