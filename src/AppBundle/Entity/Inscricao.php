@@ -62,7 +62,7 @@ class Inscricao {
     /**
      * @ORM\Column(type="boolean")
      */
-    private $depositoIdentificado;
+    private $depositoIdentificado = false;
 
     public function __construct() {
         $this->membros = new \Doctrine\Common\Collections\ArrayCollection();
