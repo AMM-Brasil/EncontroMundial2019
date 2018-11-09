@@ -61,8 +61,12 @@ class DefaultController extends Controller {
      * @Route("/edit-step-2/{inscricao}", name="edit-step-2")
      */
     public function editStep2(Inscricao $inscricao) {
+        $catreBlocoA = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-A');
+        $catreBlocoB = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-B');
         return $this->render("default/edit.step2.html.twig", [
-                    'inscricao' => $inscricao
+                    'inscricao' => $inscricao,
+                    'catreBlocoA' => $catreBlocoA,
+                    'catreBlocoB' => $catreBlocoB
         ]);
     }
 
@@ -70,6 +74,11 @@ class DefaultController extends Controller {
      * @Route("/edit-step-2/{inscricao}/do", name="do-edit-step-2")
      */
     public function doEditStep2Action(Request $request, Inscricao $inscricao) {
+        $this->saveMembros($request, $inscricao);
+        return $this->redirectToRoute('edit-step-3', ['inscricao' => $inscricao->getId()]);
+    }
+    
+    public function saveMembros(Request $request, Inscricao $inscricao) {
         $em = $this->getDoctrine()->getManager();
         foreach ($request->get('membro') as $membro) {
             $bMembro = empty($membro['id']) ? new Membro() : $this->getDoctrine()->getRepository(Membro::class)->find($membro['id']);
@@ -83,7 +92,6 @@ class DefaultController extends Controller {
             $em->persist($bMembro);
         }
         $em->flush();
-        return $this->redirectToRoute('edit-step-3', ['inscricao' => $inscricao->getId()]);
     }
 
     /**
@@ -161,12 +169,17 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/addMembro", name="adicionar-membro")
+     * @Route("/addMembro/{inscricao}", name="adicionar-membro")
      */
-    public function addMembro(Request $request) {
+    public function addMembro(Request $request, Inscricao $inscricao) {
+        $this->saveMembros($request, $inscricao);
+        $catreBlocoA = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-A');
+        $catreBlocoB = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-B');
         return $this->render('default/membro.html.twig', [
                     'membro' => new Membro(),
-                    'index' => $request->get('index')
+                    'index' => $request->get('currentIndex'),
+                    'catreBlocoA' => $catreBlocoA,
+                    'catreBlocoB' => $catreBlocoB
         ]);
     }
 
