@@ -2,7 +2,7 @@
 
 {% block inscricao %}{{ inscricao.id }}{% endblock %}
 
-{% block progresso %}25%{% endblock %}
+{% block progresso %}50%{% endblock %}
 
 {% block body %}
     <form action="{{ path('do-edit-step-2', {'inscricao': inscricao.id}) }}" method="POST">

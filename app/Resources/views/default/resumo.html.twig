@@ -55,17 +55,11 @@
                                 <td>{{ custoInscricao }},00</td>
                                 <td>{{ totalInscricoes }},00</td>
                             </tr>
-                            <tr>
-                                <td>Camisetas avulsas</td>
-                                <td>{{ camisetasAvulsas }}</td>
-                                <td>{{ custoCamiseta }}</td>
-                                <td>{{ totalCamisetas }},00</td>
-                            </tr>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="3"><b>Total</b></td>
-                                <td><b>{{ totalInscricoes + totalCamisetas }},00</b></td>
+                                <td><b>{{ totalInscricoes }},00</b></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -116,49 +110,6 @@
         </div>
     </div><br>
     
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    Camisetas avulsas
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-6 col-sm-2">
-                            <b>Infantil P:</b> {{ inscricao.camisetasAvulsasInfantilP }}
-                        </div>
-                        <div class="col-6 col-sm-2">
-                            <b>Infantil M:</b> {{ inscricao.camisetasAvulsasInfantilM }}
-                        </div>
-                        <div class="col-6 col-sm-2">
-                            <b>Infantil G:</b> {{ inscricao.camisetasAvulsasInfantilG }}
-                        </div>
-                        <div class="col-6 col-sm-2">
-                            <b>P:</b> {{ inscricao.camisetasAvulsasP }}
-                        </div>
-                        <div class="col-6 col-sm-2">
-                            <b>M:</b> {{ inscricao.camisetasAvulsasM }}
-                        </div>
-                        <div class="col-6 col-sm-2">
-                            <b>G:</b> {{ inscricao.camisetasAvulsasG }}
-                        </div>
-                        <div class="col-6 col-sm-2">
-                            <b>GG:</b> {{ inscricao.camisetasAvulsasGG }}
-                        </div>
-                        <div class="col-6 col-sm-2">
-                            <b>XG:</b> {{ inscricao.camisetasAvulsasXG }}
-                        </div>
-                        <div class="col-6 col-sm-2">
-                            <b>XXG:</b> {{ inscricao.camisetasAvulsasXXG }}
-                        </div>
-                        <div class="col-6 col-sm-2">
-                            <b>XXXG:</b> {{ inscricao.camisetasAvulsasXXXG }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <p>
         <br>
         <a href="{{ path('edit-step-1', {'id': inscricao.id }) }}" class="btn btn-secondary"><i class="fas fa-edit"></i> Editar inscrição</a> 
