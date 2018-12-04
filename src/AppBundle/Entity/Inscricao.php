@@ -34,6 +34,21 @@ class Inscricao
      */
     private $depositoIdentificado = false;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $venda = false;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $custoInscricao = 100;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $custoCamiseta = 30;
+
     public function __construct()
     {
         $this->membros = new \Doctrine\Common\Collections\ArrayCollection();
@@ -120,6 +135,71 @@ class Inscricao
     public function setDepositoIdentificado($depositoIdentificado)
     {
         $this->depositoIdentificado = $depositoIdentificado;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of custoInscricao.
+     */
+    public function getCustoInscricao()
+    {
+        return $this->custoInscricao;
+    }
+
+    /**
+     * Set the value of custoInscricao.
+     *
+     * @return self
+     */
+    public function setCustoInscricao($custoInscricao)
+    {
+        $this->custoInscricao = $custoInscricao;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of custoCamiseta.
+     */
+    public function getCustoCamiseta()
+    {
+        return $this->custoCamiseta;
+    }
+
+    /**
+     * Set the value of custoCamiseta.
+     *
+     * @return self
+     */
+    public function setCustoCamiseta($custoCamiseta)
+    {
+        $this->custoCamiseta = $custoCamiseta;
+
+        return $this;
+    }
+
+    public function getCustoTotal()
+    {
+        return $this->getCustoInscricao() * $this->getMembros()->count();
+    }
+
+    /**
+     * Get the value of venda.
+     */
+    public function getVenda()
+    {
+        return $this->venda;
+    }
+
+    /**
+     * Set the value of venda.
+     *
+     * @return self
+     */
+    public function setVenda($venda)
+    {
+        $this->venda = $venda;
 
         return $this;
     }

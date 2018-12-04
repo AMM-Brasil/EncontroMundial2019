@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
 {% block inscricao %}{{ inscricao.id }}
 {% endblock %}
@@ -15,25 +15,21 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col">
+                        <div class="col-12 col-sm">
                             <b>Cidade:</b><br>
                             {{ inscricao.cidade }}
                         </div>
-                        <div class="col">
+                        <div class="col-12 col-sm">
                             <b>Estado:</b><br>
                             {{ inscricao.uf }}
                         </div>
-                        <div class="col">
+                        <div class="col-12 col-sm">
                             <b>Diretor:</b><br>
                             {{ inscricao.diretor }}
                         </div>
-                        <div class="col">
+                        <div class="col-12 col-sm">
                             <b>E-mail:</b><br>
                             {{ inscricao.email }}
-                        </div>
-                        <div class="col">
-                            <b>Venda:</b><br>
-                            {{ inscricao.venda ? 'Sim' : 'Não'}}
                         </div>
                     </div>
                 </div>
@@ -48,34 +44,6 @@
                     Financeiro
                 </div>
                 <div class="card-body">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Qnt.</th>
-                                <th>R$/u</th>
-                                <th>R$</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Inscrições</td>
-                                <td>{{ inscricao.membros|length }}</td>
-                                <td>{{ inscricao.custoInscricao }},00</td>
-                                <td>{{ inscricao.custoTotal }},00</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="3">
-                                    <b>Total</b>
-                                </td>
-                                <td>
-                                    <b>{{ inscricao.custoTotal }},00</b>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
                     {% if inscricao.depositoIdentificado %}
                         <div class="alert alert-success">
                             Depósito identificado!
@@ -84,21 +52,27 @@
                         <div class="alert alert-danger">
                             Depósito não identificado até o momento.
                         </div>
-                        <div class="alert alert-info">
-                            <p>Realize <u>depósito identificado</u> na conta do AMM e envie o comprovante para
-                                <b>secretaria@amm-brasil.org</b>:</p>
-                            <p class="text-center">
-                                <b>Banco Itaú</b><br>
-                                <b>Agência:</b>
-                                3344<br>
-                                <b>Conta corrente:</b>
-                                42.216-1<br>
-                                <b>CNPJ:</b>
-                                30.925.436/0001-52<br>
-                                Ministério Motociclístico AMM-Brasil
-                            </p>
-                        </div>
                     {% endif %}
+                </div>
+            </div>
+        </div>
+    </div><br>
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Resumo da estadia
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for estadia, quantidade in estadias %}
+                            <div class="col">
+                                <b>{{estadia}}:</b>
+                                {{quantidade}}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -138,13 +112,6 @@
         </div>
     </div><br>
 
-    <p>
-        <br>
-        <a href="{{ path('edit-step-1', {'id': inscricao.id }) }}" class="btn btn-secondary">
-            <i class="fas fa-edit"></i>
-            Editar inscrição</a>
-        <a href="{{ path('homepage') }}" class="btn btn-primary float-right">
-            <i class="fas fa-home"></i>
-            Voltar ao início</a>
-    </p>
+    <a href="{{ path('catre') }}" class="btn btn-primary">Voltar</a>
+
 {% endblock %}

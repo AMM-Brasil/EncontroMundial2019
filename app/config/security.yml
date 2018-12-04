@@ -5,7 +5,20 @@ security:
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    ammbrasil:
+                        password: $2y$12$LHTV5ogTw89OGdTDTlkuVe.2/rG/3QcZBI60IVJh7LEYw0fV2EsBy
+                        roles: ROLE_SUPER_ADMIN
+
+    encoders:
+        Symfony\Component\Security\Core\User\User:
+            algorithm: bcrypt
+            cost: 12
+
+    access_control:
+    # matches /admin/users/*
+        - { path: ^/admin, roles: ROLE_SUPER_ADMIN }
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -18,7 +31,11 @@ security:
             # activate different ways to authenticate
 
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
+            http_basic: ~
 
             # https://symfony.com/doc/current/security/form_login_setup.html
             #form_login: ~
+        
+            logout:
+                path:   /logout
+                target: /

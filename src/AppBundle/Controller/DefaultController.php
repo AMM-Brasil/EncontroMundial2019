@@ -25,16 +25,16 @@ class DefaultController extends Controller
     {
         do {
             $inscricao = is_null($id) ?
-                    new Inscricao() :
-                    $this->getDoctrine()->getRepository(Inscricao::class)->find($id);
+                new Inscricao() :
+                $this->getDoctrine()->getRepository(Inscricao::class)->find($id);
         } while (is_null($id) && !is_null($this->getDoctrine()->getRepository(Inscricao::class)->find($inscricao->getId())));
         if (is_null($inscricao)) {
             return $this->render('default/fail.html.twig', [
-                        'id' => $id,
+                'id' => $id,
             ]);
         } else {
             return $this->render('default/edit.step1.html.twig', [
-                        'inscricao' => $inscricao,
+                'inscricao' => $inscricao,
             ]);
         }
     }
@@ -50,10 +50,11 @@ class DefaultController extends Controller
             $inscricao->setId($id);
         }
         $inscricao
-                ->setCidade($request->get('cidade'))
-                ->setUf($request->get('uf'))
-                ->setDiretor($request->get('diretor'))
-                ->setEmail($request->get('email'));
+            ->setCidade($request->get('cidade'))
+            ->setUf($request->get('uf'))
+            ->setDiretor($request->get('diretor'))
+            ->setEmail($request->get('email'))
+            ->setVenda($request->get('venda'));
         $em = $this->getDoctrine()->getManager();
         $em->persist($inscricao);
         $em->flush();
@@ -71,10 +72,10 @@ class DefaultController extends Controller
         $catreBlocoC = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-B');
 
         return $this->render('default/edit.step2.html.twig', [
-                    'inscricao' => $inscricao,
-                    'catreBlocoA' => $catreBlocoA,
-                    'catreBlocoB' => $catreBlocoB,
-                    'catreBlocoC' => $catreBlocoC,
+            'inscricao' => $inscricao,
+            'catreBlocoA' => $catreBlocoA,
+            'catreBlocoB' => $catreBlocoB,
+            'catreBlocoC' => $catreBlocoC,
         ]);
     }
 
@@ -100,7 +101,9 @@ class DefaultController extends Controller
                     ->setEstadia($membro['estadia'])
                     ->setCamiseta($membro['camiseta'])
                     ->setCalcado($membro['calcado'])
-                    ->setInscricao($inscricao);
+                    ->setInscricao($inscricao)
+                    ->setPasseio($membro['passeio'])
+                    ->setRestaurante($membro['restaurante']);
                 $em->persist($bMembro);
             }
             $em->flush();
@@ -112,15 +115,8 @@ class DefaultController extends Controller
      */
     public function resumoInscricao(Inscricao $inscricao)
     {
-        $custoInscricao = 100;
-        $custoCamiseta = 30;
-        $totalInscricoes = $inscricao->getMembros()->count() * $custoInscricao;
-
         return $this->render('default/resumo.html.twig', [
-                    'custoInscricao' => $custoInscricao,
-                    'custoCamiseta' => $custoCamiseta,
-                    'totalInscricoes' => $totalInscricoes,
-                    'inscricao' => $inscricao,
+            'inscricao' => $inscricao,
         ]);
     }
 
@@ -138,7 +134,7 @@ class DefaultController extends Controller
         }
 
         return $this->render('default/select.html.twig', [
-                    'err' => $err,
+            'err' => $err,
         ]);
     }
 
@@ -153,11 +149,11 @@ class DefaultController extends Controller
         $catreBlocoC = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-C');
 
         return $this->render('default/membro.html.twig', [
-                    'membro' => new Membro(),
-                    'index' => $request->get('currentIndex'),
-                    'catreBlocoA' => $catreBlocoA,
-                    'catreBlocoB' => $catreBlocoB,
-                    'catreBlocoC' => $catreBlocoC,
+            'membro' => new Membro(),
+            'index' => $request->get('currentIndex'),
+            'catreBlocoA' => $catreBlocoA,
+            'catreBlocoB' => $catreBlocoB,
+            'catreBlocoC' => $catreBlocoC,
         ]);
     }
 

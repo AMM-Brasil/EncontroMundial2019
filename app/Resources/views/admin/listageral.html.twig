@@ -1,0 +1,68 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+
+    <p>
+        <b>Total de regionais inscritas:</b>
+        {{ quantidadeInscricoes }}
+    </p>
+
+    <p>
+        <b>Inscrições pagas:</b>
+        {{ quantidadeInscricoesPagas }}
+    </p>
+
+    <p>
+        <b>Regionais vendendo materiais:</b> ({{ vendas|length }})<br>
+        {% for inscricao in vendas %}
+            - {{ inscricao.cidade }} - {{ inscricao.uf }}
+        {% endfor %}
+    </p>
+
+    <p>
+        <b>Veículos:</b><br>
+        {% for veiculo, quantidade in veiculos %}
+            -
+            {{ veiculo }}:
+            {{ quantidade }}<br>
+        {% endfor %}
+    </p>
+
+    <p>
+        <b>Estadias:</b><br>
+        {% for estadia, quantidade in estadias %}
+            -
+            {{ estadia }}:
+            {{ quantidade }}<br>
+        {% endfor %}
+    </p>
+
+    <p>
+        <b>Camisetas:</b><br>
+        {% for camiseta, quantidade in camisetas %}
+            -
+            {{ camiseta }}:
+            {{ quantidade }}<br>
+        {% endfor %}
+    </p>
+
+    <p>
+        <b>Calçados:</b><br>
+        {% for calcado, quantidade in calcados %}
+            - N°
+            {{ calcado }}:
+            {{ quantidade }}<br>
+        {% endfor %}
+    </p>
+
+    <p>
+        <b>Membros para passeio na Serra do Rio do Castro:</b>
+        {{ quantidadePasseio }}
+    </p>
+
+    <p>
+        <b>Membros para restaurante na Serra do Rio do Castro:</b>
+        {{ quantidadeRestaurante }}
+    </p>
+
+{% endblock %}

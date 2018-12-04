@@ -1,0 +1,72 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+
+    {% for inscricao in inscricoes %}
+        <div class="row" style="font-size: 12px; margin-top: 10px">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <b>{{ inscricao.cidade }}
+                        -
+                        {{ inscricao.uf }} |
+                        <a target="_blank" href="{{ path('resumo-inscricao', {'inscricao': inscricao.id}) }}">Detalhes</a></b>
+                    </div>
+                    <div class="card-body" style="padding: 0 10px">
+                        <div class="row">
+                            <div class="col">
+                                <b>Código:</b><br>
+                                <a target="_blank" href="{{ path('resumo-inscricao', {'inscricao': inscricao.id}) }}">{{ inscricao.id }}</a></b>
+                            </div>
+                            <div class="col">
+                                <b>Diretor:</b><br>
+                                {{ inscricao.diretor }}
+                            </div>
+                            <div class="col">
+                                <b>E-mail:</b><br>
+                                {{ inscricao.email }}
+                            </div>
+                            <div class="col">
+                                    <b>Membros inscritos:</b><br>
+                                    {{ inscricao.membros.count }}
+                                </div>
+                                <div class="col">
+                                    <b>R$/und.:</b><br>
+                                    R$
+                                    {{ inscricao.custoInscricao }},00
+                                </div>
+                                <div class="col">
+                                    <b>R$ Total:</b><br>
+                                    R$
+                                    {{ inscricao.custoTotal }},00
+                                </div>
+                            <div class="col">
+                                <b>Depósito identificado:</b>
+                                <div class="onoffswitch">
+                                    <input onchange="changeState('{{ path('admin_deposito', {'inscricao': inscricao.id}) }}', this.checked)" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch{{ loop.index }}" {% if inscricao.depositoIdentificado %} checked="checked" {% endif %}>
+                                    <label class="onoffswitch-label" for="myonoffswitch{{ loop.index }}">
+                                        <span class="onoffswitch-inner"></span>
+                                        <span class="onoffswitch-switch"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <script>
+        function changeState(url, checked) {
+            $.ajax({
+                url: url,
+                data: 'checked=' + checked
+            })
+        }
+    </script>
+
+{% endblock %}
