@@ -8,7 +8,7 @@
     <form action="{{ path('do-edit-step-2', {'inscricao': inscricao.id}) }}" method="POST">
         <fieldset>
             <legend>Membros <a href="#" onclick="adicionarMembro()" id="adicionarMembro" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Adicionar</a></legend>
-            <p>Não se esqueça de incluir o Diretor nesta lista!</p>
+            <p>Incluir nesta lista os dados do Diretor Regional, caso vá ao evento, e crianças a partir de 5 anos de idade.</p>
 
             <div class="accordion" id="listaMembros">
                 {% for membro in inscricao.membros %}
