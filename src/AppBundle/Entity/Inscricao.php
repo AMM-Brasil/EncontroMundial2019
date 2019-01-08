@@ -26,6 +26,7 @@ class Inscricao
 
     /**
      * @ORM\OneToMany(targetEntity="Membro", mappedBy="inscricao")
+     * @ORM\OrderBy({"nome" = "ASC"})
      */
     private $membros;
 

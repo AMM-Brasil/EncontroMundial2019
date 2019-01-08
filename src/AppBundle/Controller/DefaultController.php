@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\Inscricao;
 use AppBundle\Entity\Membro;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class DefaultController extends Controller
 {
@@ -144,17 +145,9 @@ class DefaultController extends Controller
     public function addMembro(Request $request, Inscricao $inscricao)
     {
         $this->saveMembros($request, $inscricao);
-        $catreBlocoA = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-A');
-        $catreBlocoB = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-B');
-        $catreBlocoC = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-C');
+        $inscricao->setMembros(new ArrayCollection(array_merge([new Membro()], $inscricao->getMembros()->toArray())));
 
-        return $this->render('default/membro.html.twig', [
-            'membro' => new Membro(),
-            'index' => $request->get('currentIndex'),
-            'catreBlocoA' => $catreBlocoA,
-            'catreBlocoB' => $catreBlocoB,
-            'catreBlocoC' => $catreBlocoC,
-        ]);
+        return $this->editStep2($inscricao);
     }
 
     /**

@@ -39,13 +39,10 @@
 {% block javascript %}
     <script>
         function adicionarMembro() {
-            $('.collapse').removeClass('show');
-            $.get('{{ path('adicionar-membro', {'inscricao': inscricao.id}) }}', $('form').serializeArray(), function (data) {
-                $('#listaMembros').prepend(data);
-                $('#currentIndex').val(parseInt($('#currentIndex').val()) + 1);
-                ativarMudancaNome();
-                ativarBotaoProximo();
-            });
+            if($('form')[0].checkValidity()) {
+                $('form').attr('action', '{{ path('adicionar-membro', {'inscricao': inscricao.id}) }}');
+            }
+            $('form').find(':submit').click();
         }
 
         function removerMembro(indexLista, membroId) {
