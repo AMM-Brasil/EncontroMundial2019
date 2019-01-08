@@ -39,7 +39,11 @@
 {% block javascript %}
     <script>
         function adicionarMembro() {
-            if($('form')[0].checkValidity()) {
+            if($('#currentIndex').val() == '0') {
+                $('form').attr('action', '{{ path('adicionar-membro', {'inscricao': inscricao.id}) }}');
+                $('form').submit();
+            }
+            else if($('form')[0].checkValidity()) {
                 $('form').attr('action', '{{ path('adicionar-membro', {'inscricao': inscricao.id}) }}');
             }
             $('form').find(':submit').click();
