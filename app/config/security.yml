@@ -8,7 +8,7 @@ security:
             memory:
                 users:
                     ammbrasil:
-                        password: $2y$12$LHTV5ogTw89OGdTDTlkuVe.2/rG/3QcZBI60IVJh7LEYw0fV2EsBy
+                        password: $2y$12$whAQvZNmOTCKyPOpBXoN9evZoGNjDstnqP64aU4LNLNn3qZypvMYy
                         roles: ROLE_SUPER_ADMIN
 
     encoders:
