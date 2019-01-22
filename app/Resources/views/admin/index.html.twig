@@ -40,6 +40,10 @@
                                     R$
                                     {{ inscricao.custoTotal }},00
                                 </div>
+                                <div class="col">
+                                    <b>Comp.:</b><br>
+                                    {{ (inscricao.comprovantes.count > 0) ? 'Sim' : 'Não' }}
+                                </div>
                             <div class="col">
                                 <b>Depósito identificado:</b>
                                 <div class="onoffswitch">
