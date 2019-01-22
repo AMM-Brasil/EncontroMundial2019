@@ -49,6 +49,14 @@
             $('form').find(':submit').click();
         }
 
+        function salvarMembro(collapse) {
+            if($('form')[0].checkValidity()) {
+                collapse.removeClass('show');
+            } else {
+                $('form').find(':submit').click();
+            }
+        }
+
         function removerMembro(indexLista, membroId) {
             if (confirm('Deseja realmente excluir o membro selecionado?')) {
                 $.get('{{ path('remover-membro') }}', {id: membroId});

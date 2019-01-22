@@ -31,6 +31,12 @@ class Inscricao
     private $membros;
 
     /**
+     * @ORM\OneToMany(targetEntity="Comprovante", mappedBy="inscricao")
+     * @ORM\OrderBy({"data" = "ASC"})
+     */
+    private $comprovantes;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private $depositoIdentificado = false;
@@ -53,6 +59,7 @@ class Inscricao
     public function __construct()
     {
         $this->membros = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->comprovantes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->id = strtoupper(substr(uniqid(), -6, 6));
     }
 
@@ -201,6 +208,26 @@ class Inscricao
     public function setVenda($venda)
     {
         $this->venda = $venda;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of comprovantes.
+     */
+    public function getComprovantes()
+    {
+        return $this->comprovantes;
+    }
+
+    /**
+     * Set the value of comprovantes.
+     *
+     * @return self
+     */
+    public function setComprovantes($comprovantes)
+    {
+        $this->comprovantes = $comprovantes;
 
         return $this;
     }

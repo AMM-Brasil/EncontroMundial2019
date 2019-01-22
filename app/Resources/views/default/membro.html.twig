@@ -32,6 +32,9 @@
                     <option value="XG" {% if membro.camiseta == 'XG'   %} selected="selected" {% endif %}>XG</option>
                     <option value="XXG" {% if membro.camiseta == 'XXG'  %} selected="selected" {% endif %}>XXG</option>
                     <option value="XXXG" {% if membro.camiseta == 'XXXG' %} selected="selected" {% endif %}>XXXG</option>
+                    <option value="INF-P" {% if membro.camiseta == 'INF-P' %} selected="selected" {% endif %}>Infantil P</option>
+                    <option value="INF-M" {% if membro.camiseta == 'INF-M' %} selected="selected" {% endif %}>Infantil M</option>
+                    <option value="INF-G" {% if membro.camiseta == 'INF-G' %} selected="selected" {% endif %}>Infantil G</option>
                 </select>
             </div>
             <div class="form-group">
@@ -86,6 +89,7 @@
             </div>
             <input type="hidden" id="membro_id_{{ index }}" name="membro[{{ index }}][id]" value="{{ membro.id }}">
             <p class="text-right">
+                <a href="#" onclick="salvarMembro($('#collapse_{{ index }}'))" class="btn btn-info btn-sm"><i class="fas fa-save"></i> Salvar</a>
                 <a href="#" onclick="removerMembro({{ index }}, {{ membro.id }})" class="text-danger btn-sm">
                     <i class="fas fa-trash"></i>
                     Excluir</a>

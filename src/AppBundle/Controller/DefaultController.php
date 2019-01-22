@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\Inscricao;
 use AppBundle\Entity\Membro;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\Comprovante;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class DefaultController extends Controller
 {
@@ -114,10 +116,29 @@ class DefaultController extends Controller
     /**
      * @Route("/resumo/{inscricao}", name="resumo-inscricao")
      */
-    public function resumoInscricao(Inscricao $inscricao)
+    public function resumoInscricao(Request $request, Inscricao $inscricao)
     {
+        $comprovante = new Comprovante($inscricao);
+        $form = $this->createFormBuilder($comprovante)
+            ->add('arquivo', FileType::class)
+            ->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $caminho = md5(uniqid()).'.'.$comprovante->getArquivo()->guessExtension();
+            $comprovante->getArquivo()->move(
+                $this->get('kernel')->getRootDir().'/../web/comprovantes',
+                $caminho
+            );
+            $comprovante->setArquivo($caminho);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comprovante);
+            $em->flush();
+        }
+
         return $this->render('default/resumo.html.twig', [
             'inscricao' => $inscricao,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -159,6 +180,21 @@ class DefaultController extends Controller
         if (!is_null($membro)) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($membro);
+            $em->flush();
+        }
+
+        return new \Symfony\Component\HttpFoundation\Response();
+    }
+
+    /**
+     * @Route("/delComprovante", name="excluir-comprovante")
+     */
+    public function excluirComprovante(Request $request)
+    {
+        $comp = $this->getDoctrine()->getRepository(Comprovante::class)->find($request->get('id', 0));
+        if (!is_null($comp)) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($comp);
             $em->flush();
         }
 
