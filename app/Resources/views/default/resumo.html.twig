@@ -6,187 +6,192 @@
 {% block progresso %}100%{% endblock %}
 
 {% block body %}
-    <h2 class="text-center">Resumo da Inscrição</h2>
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    Dados da Regional
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-2">
-                            <b>Cidade:</b><br>
-                            {{ inscricao.cidade }}
-                        </div>
-                        <div class="col-lg-2">
-                            <b>Estado:</b><br>
-                            {{ inscricao.uf }}
-                        </div>
-                        <div class="col-lg-3">
-                            <b>Diretor:</b><br>
-                            {{ inscricao.diretor }}
-                        </div>
-                        <div class="col-lg-3">
-                            <b>E-mail:</b><br>
-                            {{ inscricao.email }}
-                        </div>
-                        <div class="col-lg-2">
-                            <b>Venda:</b><br>
-                            {{ inscricao.venda ? 'Sim' : 'Não'}}
-                        </div>
+<h2 class="text-center">Resumo da Inscrição</h2>
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                Dados da Regional
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <b>Cidade:</b><br>
+                        {{ inscricao.cidade }}
+                    </div>
+                    <div class="col-lg-2">
+                        <b>Estado:</b><br>
+                        {{ inscricao.uf }}
+                    </div>
+                    <div class="col-lg-3">
+                        <b>Diretor:</b><br>
+                        {{ inscricao.diretor }}
+                    </div>
+                    <div class="col-lg-3">
+                        <b>E-mail:</b><br>
+                        {{ inscricao.email }}
+                    </div>
+                    <div class="col-lg-2">
+                        <b>Venda:</b><br>
+                        {{ inscricao.venda ? 'Sim' : 'Não'}}
                     </div>
                 </div>
             </div>
         </div>
-    </div><br>
+    </div>
+</div><br>
 
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    Financeiro
-                </div>
-                <div class="card-body">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Qnt.</th>
-                                <th>R$/u</th>
-                                <th>R$</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Inscrições</td>
-                                <td>{{ inscricao.membros|length }}</td>
-                                <td>{{ inscricao.custoInscricao }},00</td>
-                                <td>{{ inscricao.custoTotal }},00</td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="3">
-                                    <b>Total</b>
-                                </td>
-                                <td>
-                                    <b>{{ inscricao.custoTotal }},00</b>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <h6>Comprovantes</h6>
-                    <table class="table table-sm table-striped">
-                        <thead>
-                            <tr>
-                                <th>Arquivo</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if (inscricao.comprovantes.count == 0) %}
-                            <tr>
-                                <td colspan="2">Nenhum comprovante enviado até o momento.</td>
-                            </tr>
-                            {% else %}
-                                {% for comprovante in inscricao.comprovantes %}
-                                <tr>
-                                    <td><a href="{{ asset('comprovantes/' ~ comprovante.arquivo) }}" target="_blank">Comprovante {{ comprovante.data|date('d/m/Y H:i:s') }}</a></td>
-                                    <td><button type="button" onclick="excluirComprovante(this, {{ comprovante.id }})" class="btn btn-danger btn-sm"><i class="fas fa-minus"></i></button></td>
-                                </tr>
-                                {% endfor %}
-                            {% endif %}
-                        </tbody>
-                    </table>
-                    <form class="alert alert-secondary" method="post" enctype="multipart/form-data">
-                            {{ form_errors(form.arquivo) }}
-                            <div class="form-group">
-                                <label for="form_arquivo"><b>Enviar comprovante:</b></label>
-                                <input type="file" name="form[arquivo]" id="form_arquivo" required accept="application/pdf,image/*">
-                            </div>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-upload"></i> Enviar</button>
-                            <input type="hidden" name="form[_token]" value="{{ form._token.vars.value }}" />                            
-                        </form>
-                    {% if inscricao.depositoIdentificado %}
-                        <div class="alert alert-success">
-                            Depósito confirmado pela tesouraria!
-                        </div>
-                    {% else %}
-                        <div class="alert alert-danger">
-                            Depósito ainda não confirmado pela tesouraria até o momento.
-                        </div>
-                    {% endif %}
-                    <div class="alert alert-info">
-                            <p>Realize <u>depósito identificado</u> na conta do AMM e envie o comprovante para
-                                <b>secretaria@amm-brasil.org</b>:</p>
-                            <p class="text-center">
-                                <b>Banco Itaú</b><br>
-                                <b>Agência:</b>
-                                3344<br>
-                                <b>Conta corrente:</b>
-                                42.216-1<br>
-                                <b>CNPJ:</b>
-                                30.925.436/0001-52<br>
-                                Ministério Motociclístico AMM-Brasil
-                            </p>
-                        </div>
-                </div>
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                Financeiro
             </div>
-        </div>
-    </div><br>
-
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    Membros inscritos
-                </div>
-                {% for membro in inscricao.membros %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ membro.nome }}</h5>
-                        <div class="card-text row">
-                            <div class="col-12 col-sm">
-                                <b>Veículo:</b>
-                                {{ membro.veiculo }}
-                            </div>
-                            <div class="col-12 col-sm">
-                                <b>Estadia:</b>
-                                {{ membro.estadia }}
-                            </div>
-                            <div class="col-12 col-sm">
-                                <b>Camiseta:</b>
-                                {{ membro.camiseta }}
-                            </div>
-                            <div class="col-12 col-sm">
-                                <b>Calçado:</b>
-                                N°
-                                {{ membro.calcado }}
-                            </div>
-                        </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Qnt.</th>
+                            <th>R$/u</th>
+                            <th>R$</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Inscrições</td>
+                            <td>{{ inscricao.membros|length }}</td>
+                            <td>{{ inscricao.custoInscricao }},00</td>
+                            <td>{{ inscricao.custoTotal }},00</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">
+                                <b>Total</b>
+                            </td>
+                            <td>
+                                <b>{{ inscricao.custoTotal }},00</b>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <h6>Comprovantes</h6>
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Arquivo</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if (inscricao.comprovantes.count == 0) %}
+                        <tr>
+                            <td colspan="2">Nenhum comprovante enviado até o momento.</td>
+                        </tr>
+                        {% else %}
+                        {% for comprovante in inscricao.comprovantes %}
+                        <tr>
+                            <td><a href="{{ asset('comprovantes/' ~ comprovante.arquivo) }}" target="_blank">Comprovante
+                                    {{ comprovante.data|date('d/m/Y H:i:s') }}</a></td>
+                            <td><button type="button" onclick="excluirComprovante(this, {{ comprovante.id }})" class="btn btn-danger btn-sm"><i
+                                        class="fas fa-minus"></i></button></td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+                <form class="alert alert-secondary" method="post" enctype="multipart/form-data">
+                    {{ form_errors(form.arquivo) }}
+                    <div class="form-group">
+                        <label for="form_arquivo"><b>Enviar comprovante:</b></label>
+                        <input type="file" name="form[arquivo]" id="form_arquivo" required accept="application/pdf,image/*">
                     </div>
-                {% endfor %}
+                    <button type="submit" class="btn btn-success"><i class="fas fa-upload"></i> Enviar</button>
+                    <input type="hidden" name="form[_token]" value="{{ form._token.vars.value }}" />
+                </form>
+                {% if inscricao.depositoIdentificado %}
+                <div class="alert alert-success">
+                    Depósito confirmado pela tesouraria!
+                </div>
+                {% else %}
+                <div class="alert alert-danger">
+                    Depósito ainda não confirmado pela tesouraria até o momento.
+                </div>
+                {% endif %}
+                <div class="alert alert-info">
+                    <p>Realize <u>depósito identificado</u> na conta do AMM e envie o comprovante para
+                        <b>secretaria@amm-brasil.org</b>:</p>
+                    <p class="text-center">
+                        <b>Banco Itaú</b><br>
+                        <b>Agência:</b>
+                        3344<br>
+                        <b>Conta corrente:</b>
+                        42.216-1<br>
+                        <b>CNPJ:</b>
+                        30.925.436/0001-52<br>
+                        Ministério Motociclístico AMM-Brasil
+                    </p>
+                </div>
             </div>
         </div>
-    </div><br>
+    </div>
+</div><br>
 
-    <p>
-        <br>
-        <a href="{{ path('edit-step-1', {'id': inscricao.id }) }}" class="btn btn-secondary">
-            <i class="fas fa-edit"></i>
-            Editar inscrição</a>
-        <a href="{{ path('homepage') }}" class="btn btn-primary float-right">
-            <i class="fas fa-home"></i>
-            Voltar ao início</a>
-    </p>
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                Membros inscritos
+            </div>
+            {% for membro in inscricao.membros %}
+            <div class="card-body">
+                <h5 class="card-title">{{ membro.nome }}</h5>
+                <div class="card-text row">
+                    <div class="col-12 col-sm">
+                        <b>Veículo:</b>
+                        {{ membro.veiculo }}
+                    </div>
+                    <div class="col-12 col-sm">
+                        <b>Estadia:</b>
+                        {{ membro.estadia }}
+                    </div>
+                    <div class="col-12 col-sm">
+                        <b>Camiseta:</b>
+                        {{ membro.camiseta }}
+                    </div>
+                    <div class="col-12 col-sm">
+                        <b>Calçado:</b>
+                        N°
+                        {{ membro.calcado }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div><br>
 
-    <script>
-        function excluirComprovante(elem, cid) {
-            if (confirm('Confirmar a exclusão do comprovante selecionado?')) {
-                $.get('{{ path("excluir-comprovante") }}', {id: cid});
-                $(elem).parent().parent().remove();
-            }
-            return false;
+<p>
+    <br>
+    <a href="{{ path('edit-step-1', {'id': inscricao.id }) }}" class="btn btn-secondary">
+        <i class="fas fa-edit"></i>
+        Editar inscrição</a>
+    <a href="{{ path('homepage') }}" class="btn btn-primary float-right">
+        <i class="fas fa-home"></i>
+        Voltar ao início</a>
+</p>
+
+<script>
+    {% if success %}
+    alert('Inscrição realizada com sucesso!')
+    {% endif %}
+    function excluirComprovante(elem, cid) {
+        if (confirm('Confirmar a exclusão do comprovante selecionado?')) {
+            $.get('{{ path("excluir-comprovante") }}', { id: cid });
+            $(elem).parent().parent().remove();
         }
-    </script>
+        return false;
+    }
+</script>
 {% endblock %}

@@ -112,7 +112,7 @@ class DefaultController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('resumo-inscricao', ['inscricao' => $inscricao->getId()]);
+        return $this->redirectToRoute('resumo-inscricao', ['inscricao' => $inscricao->getId(), 'success' => true]);
     }
 
     public function saveMembros(Request $request, Inscricao $inscricao)
@@ -185,6 +185,7 @@ class DefaultController extends Controller
         return $this->render('default/resumo.html.twig', [
             'inscricao' => $inscricao,
             'form' => $form->createView(),
+            'success' => $request->get('success'),
         ]);
     }
 
