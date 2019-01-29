@@ -53,6 +53,7 @@
                                         <span class="onoffswitch-switch"></span>
                                     </label>
                                 </div>
+                                <a href="#" data-url="{{ path('excluir-inscricao', {'inscricao': inscricao.id}) }}" onclick="excluirInscricao(this)" class="text-danger">Excluir</a>
                             </div>
                         </div>
                         <div class="row">
@@ -70,6 +71,12 @@
                 url: url,
                 data: 'checked=' + checked
             })
+        }
+
+        function excluirInscricao(elem) {
+            if (confirm('Deseja realmente excluir esta inscrição?')) {
+                location.href = $(elem).attr('data-url');
+            }
         }
     </script>
 

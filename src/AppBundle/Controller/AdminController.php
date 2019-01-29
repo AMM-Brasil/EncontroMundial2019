@@ -105,4 +105,16 @@ class AdminController extends Controller
             'vendas' => $vendas,
         ]);
     }
+
+    /**
+     * @Route("/admin/excluirInscricao/{inscricao}", name="excluir-inscricao")
+     */
+    public function excluirInscricao(Inscricao $inscricao)
+    {
+        $etm = $this->getDoctrine()->getManager();
+        $etm->remove($inscricao);
+        $etm->flush();
+
+        return $this->redirectToRoute('admin');
+    }
 }

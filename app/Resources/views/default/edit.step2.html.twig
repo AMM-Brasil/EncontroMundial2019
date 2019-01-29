@@ -7,7 +7,7 @@
 {% block body %}
     <form action="{{ path('do-edit-step-2', {'inscricao': inscricao.id}) }}" method="POST">
         <fieldset>
-            <legend>Membros <a href="#" onclick="adicionarMembro()" id="adicionarMembro" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Adicionar</a></legend>
+            <legend>Membros <a href="{{ path('adicionar-membro', {'inscricao': inscricao.id}) }}" id="adicionarMembro" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Adicionar</a></legend>
             <p>Incluir nesta lista os dados do Diretor Regional, caso vá ao evento, e crianças a partir de 5 anos de idade.</p>
 
             <div class="accordion" id="listaMembros">
@@ -19,7 +19,7 @@
         <input type="hidden" id="currentIndex" name="currentIndex" value="{{ inscricao.membros|length }}">
         <p>
             <a href="{{ path('edit-step-1', {'id': inscricao.id }) }}" class="btn btn-secondary"><i class="fas fa-chevron-left"></i> Anterior</a> 
-            <button type="submit" class="btn btn-success float-right" disabled id="proximo">Próximo <i class="fas fa-chevron-right"></i></button>
+            <button type="submit" class="btn btn-success float-right" disabled id="proximo"><i class="fas fa-check"></i> Finalizar inscrição</button>
         </p>                
     </form>
     <div class="modal" tabindex="-1" role="dialog" id="vagasModal">
@@ -38,23 +38,12 @@
 
 {% block javascript %}
     <script>
-        function adicionarMembro() {
-            if($('#currentIndex').val() == '0') {
-                $('form').attr('action', '{{ path('adicionar-membro', {'inscricao': inscricao.id}) }}');
-                $('form').submit();
-            }
-            else if($('form')[0].checkValidity()) {
-                $('form').attr('action', '{{ path('adicionar-membro', {'inscricao': inscricao.id}) }}');
-            }
-            $('form').find(':submit').click();
-        }
 
         function salvarMembro(collapse) {
             if($('form')[0].checkValidity()) {
-                collapse.removeClass('show');
-            } else {
-                $('form').find(':submit').click();
+                $('form').attr('action', '{{ path('save-membro', {'inscricao': inscricao.id}) }}');
             }
+            $('form').find(':submit').click();
         }
 
         function removerMembro(indexLista, membroId) {

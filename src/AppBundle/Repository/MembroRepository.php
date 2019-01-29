@@ -12,7 +12,10 @@ class MembroRepository extends EntityRepository
         $rsm->addScalarResult('inscritos', 'inscritos', 'integer');
 
         return $this->getEntityManager()->createNativeQuery(
-                'SELECT count(*) inscritos FROM membro WHERE estadia = :bloco',
+                ' SELECT count(m.id) as inscritos FROM membro m '.
+                ' JOIN inscricao i ON i.id = m.inscricao_id '.
+                ' WHERE m.estadia = :bloco '.
+                ' AND i.deposito_identificado = 1 ',
                 $rsm)
                 ->setParameter(':bloco', $bloco)
                 ->getSingleScalarResult();

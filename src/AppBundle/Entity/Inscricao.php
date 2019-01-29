@@ -25,7 +25,7 @@ class Inscricao
     private $email;
 
     /**
-     * @ORM\OneToMany(targetEntity="Membro", mappedBy="inscricao")
+     * @ORM\OneToMany(targetEntity="Membro", mappedBy="inscricao", cascade={"remove"})
      * @ORM\OrderBy({"nome" = "ASC"})
      */
     private $membros;

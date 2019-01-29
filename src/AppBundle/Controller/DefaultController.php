@@ -115,6 +115,9 @@ class DefaultController extends Controller
         return $this->redirectToRoute('resumo-inscricao', ['inscricao' => $inscricao->getId(), 'success' => true]);
     }
 
+    /**
+     * @Route("/saveMembro/{inscricao}", name="save-membro")
+     */
     public function saveMembros(Request $request, Inscricao $inscricao)
     {
         if ($request->get('membro')) {
@@ -134,6 +137,8 @@ class DefaultController extends Controller
             }
             $em->flush();
         }
+
+        return $this->redirectToRoute('edit-step-2', ['inscricao' => $inscricao->getId()]);
     }
 
     /**
