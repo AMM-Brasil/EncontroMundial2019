@@ -23,12 +23,24 @@ class AdminController extends Controller
     /**
      * @Route("/admin/deposito/{inscricao}", name="admin_deposito")
      */
-    public function depositoAction(Request $request, Inscricao $inscricao)
+    public function depositoAction(Request $request, \Swift_Mailer $mailer, Inscricao $inscricao)
     {
         $inscricao->setDepositoIdentificado($request->query->get('checked') == 'true');
         $enm = $this->getDoctrine()->getManager();
         $enm->persist($inscricao);
         $enm->flush();
+        if ($inscricao->getDepositoIdentificado()) {
+            $message = (new \Swift_Message('Inscrição no Encontro Mundial AMM'))
+                ->setFrom(['comunicacao@amm-brasil.org' => 'Comunicação AMM'])
+                ->setTo($inscricao->getEmail())
+                ->setBody(
+                    sprintf('O depósito para o pagamento da inscrição da sua Regional foi identificado!<br>'.
+                        'Agora você pode prosseguir com a reserva dos quartos no CATRE, caso algum membro tenho decidido ficar por lá.<br>'.
+                        'Por telefone, basta passar o número de inscrição para prosseguir com a reserva: <b>%s</b>.', $inscricao->getId()),
+                    'text/html'
+                );
+            $mailer->send($message);
+        }
 
         return new Response('ok');
     }

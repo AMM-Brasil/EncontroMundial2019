@@ -56,6 +56,11 @@ class Inscricao
      */
     private $custoCamiseta = 30;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $emailEnviado = false;
+
     public function __construct()
     {
         $this->membros = new \Doctrine\Common\Collections\ArrayCollection();
@@ -228,6 +233,26 @@ class Inscricao
     public function setComprovantes($comprovantes)
     {
         $this->comprovantes = $comprovantes;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of emailEnviado.
+     */
+    public function getEmailEnviado()
+    {
+        return $this->emailEnviado;
+    }
+
+    /**
+     * Set the value of emailEnviado.
+     *
+     * @return self
+     */
+    public function setEmailEnviado($emailEnviado)
+    {
+        $this->emailEnviado = $emailEnviado;
 
         return $this;
     }

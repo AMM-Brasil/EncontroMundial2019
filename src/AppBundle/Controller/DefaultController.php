@@ -10,6 +10,7 @@ use AppBundle\Entity\Membro;
 use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Comprovante;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DefaultController extends Controller
 {
@@ -85,9 +86,31 @@ class DefaultController extends Controller
     /**
      * @Route("/edit-step-2/{inscricao}/do", name="do-edit-step-2")
      */
-    public function doEditStep2Action(Request $request, Inscricao $inscricao)
+    public function doEditStep2Action(Request $request, \Swift_Mailer $mailer, Inscricao $inscricao)
     {
         $this->saveMembros($request, $inscricao);
+        if (!$inscricao->getEmailEnviado()) {
+            $url = $this->generateUrl('resumo-inscricao', ['inscricao' => $inscricao->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+            $message = (new \Swift_Message('Inscrição no Encontro Mundial AMM'))
+                ->setFrom(['comunicacao@amm-brasil.org' => 'Comunicação AMM'])
+                ->setTo($inscricao->getEmail())
+                ->setBody(
+                    sprintf(
+                        'A inscrição da sua Regional foi realizada com sucesso com o número: <b>%s</b><br>'.
+                            'Realize o pagamento, insira o comprovante no sistema e aguarde a confirmação do tesoureiro. Você receberá um e-mail quando o depósito for confirmado.<br>'.
+                            'Acompanhe o processo ou edite sua inscrição através do link: <a href="%s" target="_blank">%s</a>',
+                        $inscricao->getId(),
+                        $url,
+                        $url
+                    ),
+                    'text/html'
+                );
+            $mailer->send($message);
+            $inscricao->setEmailEnviado(true);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($inscricao);
+            $em->flush();
+        }
 
         return $this->redirectToRoute('resumo-inscricao', ['inscricao' => $inscricao->getId()]);
     }
@@ -116,7 +139,7 @@ class DefaultController extends Controller
     /**
      * @Route("/resumo/{inscricao}", name="resumo-inscricao")
      */
-    public function resumoInscricao(Request $request, Inscricao $inscricao)
+    public function resumoInscricao(Request $request, \Swift_Mailer $mailer, Inscricao $inscricao)
     {
         $comprovante = new Comprovante($inscricao);
         $form = $this->createFormBuilder($comprovante)
@@ -131,9 +154,32 @@ class DefaultController extends Controller
                 $caminho
             );
             $comprovante->setArquivo($caminho);
+            $inscricao->setDepositoIdentificado(false);
             $em = $this->getDoctrine()->getManager();
             $em->persist($comprovante);
+            $em->persist($inscricao);
             $em->flush();
+            $url = $this->generateUrl('resumo-inscricao', ['inscricao' => $inscricao->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+            $urlAdmin = $this->generateUrl('admin', [], UrlGeneratorInterface::ABSOLUTE_URL);
+            $mTes = (new \Swift_Message('Novo comprovante'))
+                ->setFrom(['comunicacao@amm-brasil.org' => 'Comunicação AMM'])
+                ->setTo('natanaelsimoes@gmail.com')
+                ->setBody(
+                    sprintf(
+                        'O Diretor da Regional de %s - %s adicionou um novo comprovante de depósito no sistema.<br>'.
+                            'Favor, verificar na conta do AMM e identificar no sistema.<br>'.
+                            'Inscrição da Regional: <a href="%s" target="_blank">%s</a><br>'.
+                            'Sistema administrativo: <a href="%s" target="_blank">%s</a>',
+                        $inscricao->getCidade(),
+                        $inscricao->getUf(),
+                        $url,
+                        $url,
+                        $urlAdmin,
+                        $urlAdmin
+                    ),
+                    'text/html'
+                );
+            $mailer->send($mTes);
         }
 
         return $this->render('default/resumo.html.twig', [
