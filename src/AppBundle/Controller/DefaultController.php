@@ -168,7 +168,7 @@ class DefaultController extends Controller
             $urlAdmin = $this->generateUrl('admin', [], UrlGeneratorInterface::ABSOLUTE_URL);
             $mTes = (new \Swift_Message('Novo comprovante'))
                 ->setFrom(['comunicacao@amm-brasil.org' => 'Comunicação AMM'])
-                ->setTo('natanaelsimoes@gmail.com')
+                ->setTo('tesouraria@amm-brasil.org')
                 ->setBody(
                     sprintf(
                         'O Diretor da Regional de %s - %s adicionou um novo comprovante de depósito no sistema.<br>'.
