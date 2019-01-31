@@ -15,7 +15,7 @@
     <p>
         <b>Regionais vendendo materiais:</b> ({{ vendas|length }})<br>
         {% for inscricao in vendas %}
-            - {{ inscricao.cidade }} - {{ inscricao.uf }}
+            - {{ inscricao.cidade }} - {{ inscricao.uf }}<br>
         {% endfor %}
     </p>
 
