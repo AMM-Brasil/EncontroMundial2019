@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\Inscricao;
+use Proxies\__CG__\AppBundle\Entity\Membro;
 
 class AdminController extends Controller
 {
@@ -55,6 +56,8 @@ class AdminController extends Controller
         $inscricoesPagas = array_filter($inscricoes, function (Inscricao $inscricao) {
             return $inscricao->getDepositoIdentificado();
         });
+        $quantidadeMembrosInscritos = $this->getDoctrine()->getRepository(Membro::class)->countByAll();
+        $quantidadeMembrosIncritosPagos = $this->getDoctrine()->getRepository(Membro::class)->countByPago();
         $quantidadeInscricoesPagas = count($inscricoesPagas);
         $veiculos = array();
         $estadias = array();
@@ -102,6 +105,8 @@ class AdminController extends Controller
             'calcados' => $calcados,
             'quantidadePasseio' => $quantidadePasseio,
             'quantidadeRestaurante' => $quantidadeRestaurante,
+            'quantidadeMembrosInscritos' => $quantidadeMembrosInscritos,
+            'quantidadeMembrosInscritosPagos' => $quantidadeMembrosIncritosPagos,
             'vendas' => $vendas,
         ]);
     }

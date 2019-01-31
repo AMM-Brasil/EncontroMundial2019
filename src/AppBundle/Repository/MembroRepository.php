@@ -20,4 +20,28 @@ class MembroRepository extends EntityRepository
                 ->setParameter(':bloco', $bloco)
                 ->getSingleScalarResult();
     }
+
+    public function countByAll()
+    {
+        $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+        $rsm->addScalarResult('inscritos', 'inscritos', 'integer');
+
+        return $this->getEntityManager()->createNativeQuery(
+                ' SELECT count(m.id) as inscritos FROM membro m ',
+                $rsm)
+                ->getSingleScalarResult();
+    }
+
+    public function countByPago()
+    {
+        $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+        $rsm->addScalarResult('inscritos', 'inscritos', 'integer');
+
+        return $this->getEntityManager()->createNativeQuery(
+                ' SELECT count(m.id) as inscritos FROM membro m '.
+                ' JOIN inscricao i ON i.id = m.inscricao_id '.
+                ' AND i.deposito_identificado = 1 ',
+                $rsm)
+                ->getSingleScalarResult();
+    }
 }
