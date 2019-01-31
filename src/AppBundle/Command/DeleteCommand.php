@@ -14,7 +14,7 @@ class DeleteCommand extends Command
     private $etm;
     private $mailer;
 
-    public function __construct(? string $name = null, EntityManagerInterface $etm, \Swift_Mailer $mailer)
+    public function __construct($name = null, EntityManagerInterface $etm, \Swift_Mailer $mailer)
     {
         parent::__construct($name);
         $this->etm = $etm;
