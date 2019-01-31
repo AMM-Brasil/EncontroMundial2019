@@ -200,7 +200,6 @@ class DefaultController extends Controller
     {
         return $this->render('default/resumo.html.twig', [
             'inscricao' => $inscricao,
-            'form' => $form->createView(),
             'success' => $request->get('success'),
         ]);
     }
