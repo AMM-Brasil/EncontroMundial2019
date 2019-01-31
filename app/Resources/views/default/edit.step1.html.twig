@@ -9,6 +9,7 @@
     <form action="{{ path('do-edit-step-1', {'id': inscricao.id}) }}" method="POST">
         <fieldset>
             <legend>Dados da Regional</legend>
+            <label>Data/hora da inscrição: </label> <b>{{ inscricao.dataCriacao|date('d/m/Y H:i:s') }}</b>
             <div class="form-group">
                 <label for="cidade">Cidade:</label>
                 <input type="text" class="form-control" name="cidade" id="cidade" required="required" value="{{ inscricao.cidade }}" onkeyup="this.value = this.value.toUpperCase()">

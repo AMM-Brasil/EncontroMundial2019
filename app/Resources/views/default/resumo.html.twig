@@ -75,41 +75,7 @@
                             </td>
                         </tr>
                     </tfoot>
-                </table>
-                <h6>Comprovantes</h6>
-                <table class="table table-sm table-striped">
-                    <thead>
-                        <tr>
-                            <th>Arquivo</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% if (inscricao.comprovantes.count == 0) %}
-                        <tr>
-                            <td colspan="2">Nenhum comprovante enviado até o momento.</td>
-                        </tr>
-                        {% else %}
-                        {% for comprovante in inscricao.comprovantes %}
-                        <tr>
-                            <td><a href="{{ asset('comprovantes/' ~ comprovante.arquivo) }}" target="_blank">Comprovante
-                                    {{ comprovante.data|date('d/m/Y H:i:s') }}</a></td>
-                            <td><button type="button" onclick="excluirComprovante(this, {{ comprovante.id }})" class="btn btn-danger btn-sm"><i
-                                        class="fas fa-minus"></i></button></td>
-                        </tr>
-                        {% endfor %}
-                        {% endif %}
-                    </tbody>
-                </table>
-                <form class="alert alert-secondary" method="post" enctype="multipart/form-data">
-                    {{ form_errors(form.arquivo) }}
-                    <div class="form-group">
-                        <label for="form_arquivo"><b>Enviar comprovante:</b></label>
-                        <input type="file" name="form[arquivo]" id="form_arquivo" required accept="application/pdf,image/*">
-                    </div>
-                    <button type="submit" class="btn btn-success"><i class="fas fa-upload"></i> Enviar</button>
-                    <input type="hidden" name="form[_token]" value="{{ form._token.vars.value }}" />
-                </form>
+                </table>                
                 {% if inscricao.depositoIdentificado %}
                 <div class="alert alert-success">
                     Depósito confirmado pela tesouraria!
@@ -120,8 +86,7 @@
                 </div>
                 {% endif %}
                 <div class="alert alert-info">
-                    <p>Realize <u>depósito identificado</u> na conta do AMM e envie o comprovante para
-                        <b>secretaria@amm-brasil.org</b>:</p>
+                    <p>Realize <u>depósito identificado</u> na conta do AMM:</p>
                     <p class="text-center">
                         <b>Banco Itaú</b><br>
                         <b>Agência:</b>
@@ -186,12 +151,5 @@
     {% if success %}
     alert('Inscrição realizada com sucesso!')
     {% endif %}
-    function excluirComprovante(elem, cid) {
-        if (confirm('Confirmar a exclusão do comprovante selecionado?')) {
-            $.get('{{ path("excluir-comprovante") }}', { id: cid });
-            $(elem).parent().parent().remove();
-        }
-        return false;
-    }
 </script>
 {% endblock %}

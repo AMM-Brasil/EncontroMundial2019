@@ -2,7 +2,7 @@
 
 {% block inscricao %}{{ inscricao.id }}{% endblock %}
 
-{% block progresso %}50%{% endblock %}
+{% block progresso %}33%{% endblock %}
 
 {% block body %}
     <form action="{{ path('do-edit-step-2', {'inscricao': inscricao.id}) }}" method="POST">
@@ -19,7 +19,7 @@
         <input type="hidden" id="currentIndex" name="currentIndex" value="{{ inscricao.membros|length }}">
         <p>
             <a href="{{ path('edit-step-1', {'id': inscricao.id }) }}" class="btn btn-secondary"><i class="fas fa-chevron-left"></i> Anterior</a> 
-            <button type="submit" class="btn btn-success float-right" disabled id="proximo"><i class="fas fa-check"></i> Finalizar inscrição</button>
+            <button type="submit" class="btn btn-success float-right" disabled id="proximo">Próximo <i class="fas fa-chevron-right"></i></button>
         </p>                
     </form>
     <div class="modal" tabindex="-1" role="dialog" id="vagasModal">

@@ -112,39 +112,13 @@ class DefaultController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('resumo-inscricao', ['inscricao' => $inscricao->getId(), 'success' => true]);
+        return $this->redirectToRoute('edit-step-3', ['inscricao' => $inscricao->getId()]);
     }
 
     /**
-     * @Route("/saveMembro/{inscricao}", name="save-membro")
+     * @Route("/edit-step-3/{inscricao}", name="edit-step-3")
      */
-    public function saveMembros(Request $request, Inscricao $inscricao)
-    {
-        if ($request->get('membro')) {
-            $em = $this->getDoctrine()->getManager();
-            foreach ($request->get('membro') as $membro) {
-                $bMembro = empty($membro['id']) ? new Membro() : $this->getDoctrine()->getRepository(Membro::class)->find($membro['id']);
-                $bMembro
-                    ->setNome($membro['nome'])
-                    ->setVeiculo($membro['veiculo'])
-                    ->setEstadia($membro['estadia'])
-                    ->setCamiseta($membro['camiseta'])
-                    ->setCalcado($membro['calcado'])
-                    ->setInscricao($inscricao)
-                    ->setPasseio($membro['passeio'])
-                    ->setRestaurante($membro['restaurante']);
-                $em->persist($bMembro);
-            }
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('edit-step-2', ['inscricao' => $inscricao->getId()]);
-    }
-
-    /**
-     * @Route("/resumo/{inscricao}", name="resumo-inscricao")
-     */
-    public function resumoInscricao(Request $request, \Swift_Mailer $mailer, Inscricao $inscricao)
+    public function editStep3(Request $request, \Swift_Mailer $mailer, Inscricao $inscricao)
     {
         $comprovante = new Comprovante($inscricao);
         $form = $this->createFormBuilder($comprovante)
@@ -187,6 +161,43 @@ class DefaultController extends Controller
             $mailer->send($mTes);
         }
 
+        return $this->render('default/edit.step3.html.twig', [
+            'inscricao' => $inscricao,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/saveMembro/{inscricao}", name="save-membro")
+     */
+    public function saveMembros(Request $request, Inscricao $inscricao)
+    {
+        if ($request->get('membro')) {
+            $em = $this->getDoctrine()->getManager();
+            foreach ($request->get('membro') as $membro) {
+                $bMembro = empty($membro['id']) ? new Membro() : $this->getDoctrine()->getRepository(Membro::class)->find($membro['id']);
+                $bMembro
+                    ->setNome($membro['nome'])
+                    ->setVeiculo($membro['veiculo'])
+                    ->setEstadia($membro['estadia'])
+                    ->setCamiseta($membro['camiseta'])
+                    ->setCalcado($membro['calcado'])
+                    ->setInscricao($inscricao)
+                    ->setPasseio($membro['passeio'])
+                    ->setRestaurante($membro['restaurante']);
+                $em->persist($bMembro);
+            }
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('edit-step-2', ['inscricao' => $inscricao->getId()]);
+    }
+
+    /**
+     * @Route("/resumo/{inscricao}", name="resumo-inscricao")
+     */
+    public function resumoInscricao(Request $request, Inscricao $inscricao)
+    {
         return $this->render('default/resumo.html.twig', [
             'inscricao' => $inscricao,
             'form' => $form->createView(),

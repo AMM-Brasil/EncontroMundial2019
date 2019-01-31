@@ -1,76 +1,67 @@
 {% extends 'base.html.twig' %}
-
-{% block inscricao %}{{ inscricao.id }}{% endblock %}
-
-{% block progresso %}75%{% endblock %}
-
+{% block inscricao %}
+    {{ inscricao.id }}{% endblock %}
+{% block progresso %}66%{% endblock %}
 {% block body %}
-    <form action="{{ path('do-edit-step-3', {'inscricao': inscricao.id}) }}" method="POST">
-        <fieldset>
-            <legend>Camisetas avulsas</legend>
-            <div class="form-group row">
-                <label for="infantilP" class="col-form-label col-4 col-sm-2">Infantil P:</label>
-                <div class="col-3 col-sm-1">
-                    <input type="number" name="infantilP" id="infantilP" class="form-control" value="{{ inscricao.camisetasAvulsasInfantilP }}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="infantilM" class="col-form-label col-4 col-sm-2">Infantil M:</label>
-                <div class="col-3 col-sm-1">
-                    <input type="number" name="infantilM" id="infantilM" class="form-control" value="{{ inscricao.camisetasAvulsasInfantilM }}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="infantilG" class="col-form-label col-4 col-sm-2">Infantil G:</label>
-                <div class="col-3 col-sm-1">
-                    <input type="number" name="infantilG" id="infantilG" class="form-control" value="{{ inscricao.camisetasAvulsasInfantilG }}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="P" class="col-form-label col-4 col-sm-2">P:</label>
-                <div class="col-3 col-sm-1">
-                    <input type="number" name="P" id="P" class="form-control" value="{{ inscricao.camisetasAvulsasP }}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="M" class="col-form-label col-4 col-sm-2">M:</label>
-                <div class="col-3 col-sm-1">
-                    <input type="number" name="M" id="M" class="form-control" value="{{ inscricao.camisetasAvulsasM }}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="G" class="col-form-label col-4 col-sm-2">G:</label>
-                <div class="col-3 col-sm-1">
-                    <input type="number" name="G" id="G" class="form-control" value="{{ inscricao.camisetasAvulsasG }}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="GG" class="col-form-label col-4 col-sm-2">GG:</label>
-                <div class="col-3 col-sm-1">
-                    <input type="number" name="GG" id="GG" class="form-control" value="{{ inscricao.camisetasAvulsasGG }}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="XG" class="col-form-label col-4 col-sm-2">XG:</label>
-                <div class="col-3 col-sm-1">
-                    <input type="number" name="XG" id="XG" class="form-control" value="{{ inscricao.camisetasAvulsasXG }}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="XXG" class="col-form-label col-4 col-sm-2">XXG:</label>
-                <div class="col-3 col-sm-1">
-                    <input type="number" name="XXG" id="XXG" class="form-control" value="{{ inscricao.camisetasAvulsasXXG }}">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="XXXG" class="col-form-label col-4 col-sm-2">XXXG:</label>
-                <div class="col-3 col-sm-1">
-                    <input type="number" name="XXXG" id="XXXG" class="form-control" value="{{ inscricao.camisetasAvulsasXXXG }}">
-                </div>
-            </div>
+    <h6>Comprovantes de Depósito/Transferência</h6>
+    <table class="table table-sm table-striped">
+        <thead>
+            <tr>
+                <th>Arquivo</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if (inscricao.comprovantes.count == 0) %}
+                <tr>
+                    <td colspan="2">Nenhum comprovante enviado até o momento.<br>
+                            <span class="text-danger">Esta inscrição será cancelada caso você não insira um comprovante em até 48h! ({{ inscricao.dataLimitePagamento|date('d/m/Y H:i:s') }})</span>
+                        </td>
+                    </tr>
+                    {% else %}
+                    {% for comprovante in inscricao.comprovantes %}
+                        <tr>
+                            <td>
+                                <a href="{{ asset('comprovantes/' ~ comprovante.arquivo) }}" target="_blank">Comprovante
+                                    {{ comprovante.data|date('d/m/Y H:i:s') }}</a>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" onclick="excluirComprovante(this, {{ comprovante.id }})" type="button">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+        <form class="alert alert-secondary" enctype="multipart/form-data" method="post">
+            {{ form_errors(form.arquivo) }}
+            <div class="form-group">
+                <label for="form_arquivo">
+                    <b>Enviar comprovante:</b>
+                </label>
+                <input accept="application/pdf,image/*" id="form_arquivo" name="form[arquivo]" required type="file"></div>
+                <button class="btn btn-success" type="submit">
+                    <i class="fas fa-upload"></i>
+                    Enviar</button>
+                <input type="hidden" name="form[_token]" value="{{ form._token.vars.value }}"/>
+            </form>
             <p>
-                <a href="{{ path('edit-step-2', {'inscricao': inscricao.id }) }}" class="btn btn-secondary"><i class="fas fa-chevron-left"></i> Anterior</a> 
-                <button type="submit" class="btn btn-success float-right">Próximo <i class="fas fa-chevron-right"></i></button>
-            </p>                
-    </form>
-{% endblock %}
+                <a href="{{ path('edit-step-2', {'inscricao': inscricao.id }) }}" class="btn btn-secondary">
+                    <i class="fas fa-chevron-left"></i>
+                    Anterior</a>
+                <a href="{{ path('resumo-inscricao', {'inscricao': inscricao.id, 'success': 1 }) }}" class="btn btn-success float-right" id="proximo">Próximo
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </p>
+            <script>
+                function excluirComprovante(elem, cid) {
+                    if (confirm('Confirmar a exclusão do comprovante selecionado?')) {
+                        $.get('{{ path("excluir-comprovante") }}', {id: cid});
+                        location.reload();
+                    }
+                }
+            </script>
+        {% endblock %}
+    

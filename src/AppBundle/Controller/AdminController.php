@@ -122,4 +122,9 @@ class AdminController extends Controller
 
         return $this->redirectToRoute('admin');
     }
+
+    public function excluirInscricoesNaoPagas()
+    {
+        $etm = $this->getDoctrine()->getManager();
+    }
 }

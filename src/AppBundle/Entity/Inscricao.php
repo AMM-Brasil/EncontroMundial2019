@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="\AppBundle\Repository\InscricaoRepository")
  */
 class Inscricao
 {
@@ -61,10 +61,23 @@ class Inscricao
      */
     private $emailEnviado = false;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dataCriacao;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dataLimitePagamento;
+
     public function __construct()
     {
         $this->membros = new \Doctrine\Common\Collections\ArrayCollection();
         $this->comprovantes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dataCriacao = new \DateTime('now');
+        $this->dataLimitePagamento = new \DateTime('now');
+        $this->dataLimitePagamento->add(\date_interval_create_from_date_string('2 days'));
         $this->id = strtoupper(substr(uniqid(), -6, 6));
     }
 
@@ -253,6 +266,46 @@ class Inscricao
     public function setEmailEnviado($emailEnviado)
     {
         $this->emailEnviado = $emailEnviado;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of dataCriacao.
+     */
+    public function getDataCriacao()
+    {
+        return $this->dataCriacao;
+    }
+
+    /**
+     * Set the value of dataCriacao.
+     *
+     * @return self
+     */
+    public function setDataCriacao($dataCriacao)
+    {
+        $this->dataCriacao = $dataCriacao;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of dataLimitePagamento.
+     */
+    public function getDataLimitePagamento()
+    {
+        return $this->dataLimitePagamento;
+    }
+
+    /**
+     * Set the value of dataLimitePagamento.
+     *
+     * @return self
+     */
+    public function setDataLimitePagamento($dataLimitePagamento)
+    {
+        $this->dataLimitePagamento = $dataLimitePagamento;
 
         return $this;
     }

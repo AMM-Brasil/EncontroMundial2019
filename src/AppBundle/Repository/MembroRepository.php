@@ -14,8 +14,7 @@ class MembroRepository extends EntityRepository
         return $this->getEntityManager()->createNativeQuery(
                 ' SELECT count(m.id) as inscritos FROM membro m '.
                 ' JOIN inscricao i ON i.id = m.inscricao_id '.
-                ' WHERE m.estadia = :bloco '.
-                ' AND i.deposito_identificado = 1 ',
+                ' WHERE m.estadia = :bloco ',
                 $rsm)
                 ->setParameter(':bloco', $bloco)
                 ->getSingleScalarResult();
