@@ -92,7 +92,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/edit-step-2/{inscricao}/do", name="do-edit-step-2")
+     * @Route("/edit-step-2/{inscricao}/action/do", name="do-edit-step-2")
      */
     public function doEditStep2Action(Request $request, \Swift_Mailer $mailer, Inscricao $inscricao)
     {
