@@ -66,7 +66,7 @@ class AdminController extends Controller
         $vendas = array();
         $quantidadePasseio = 0;
         $quantidadeRestaurante = 0;
-        foreach ($inscricoesPagas as $inscricao) {
+        foreach ($inscricoes as $inscricao) {
             if ($inscricao->getVenda()) {
                 array_push($vendas, $inscricao);
             }
