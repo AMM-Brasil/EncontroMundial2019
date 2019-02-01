@@ -184,7 +184,7 @@ class DefaultController extends Controller
         if ($request->get('membro')) {
             $em = $this->getDoctrine()->getManager();
             foreach ($request->get('membro') as $membro) {
-                if (empty($membro['id']) && $this->getVagasRestantes() > 0) {
+                if ((empty($membro['id']) && $this->getVagasRestantes() > 0) || $membro['id']) {
                     $bMembro = empty($membro['id']) ? new Membro() : $this->getDoctrine()->getRepository(Membro::class)->find($membro['id']);
                     $bMembro
                         ->setNome($membro['nome'])
