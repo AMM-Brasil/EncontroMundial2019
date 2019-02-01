@@ -19,7 +19,14 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('default/index.html.twig');
+        return $this->render('default/index.html.twig', ['vagasRestantes' => $this->getVagasRestantes()]);
+    }
+
+    private function getVagasRestantes()
+    {
+        $membros = $this->getDoctrine()->getRepository(Membro::class)->findAll();
+
+        return 440 - count($membros);
     }
 
     /**
@@ -67,9 +74,9 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/edit-step-2/{inscricao}", name="edit-step-2")
+     * @Route("/edit-step-2/{inscricao}/{acabouVagas}", name="edit-step-2")
      */
-    public function editStep2(Inscricao $inscricao)
+    public function editStep2(Inscricao $inscricao, $acabouVagas = false)
     {
         $catreBlocoA = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-A');
         $catreBlocoB = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-B');
@@ -80,6 +87,7 @@ class DefaultController extends Controller
             'catreBlocoA' => $catreBlocoA,
             'catreBlocoB' => $catreBlocoB,
             'catreBlocoC' => $catreBlocoC,
+            'acabouVagas' => $acabouVagas,
         ]);
     }
 
@@ -172,25 +180,30 @@ class DefaultController extends Controller
      */
     public function saveMembros(Request $request, Inscricao $inscricao)
     {
+        $acabouVagas = false;
         if ($request->get('membro')) {
             $em = $this->getDoctrine()->getManager();
             foreach ($request->get('membro') as $membro) {
-                $bMembro = empty($membro['id']) ? new Membro() : $this->getDoctrine()->getRepository(Membro::class)->find($membro['id']);
-                $bMembro
-                    ->setNome($membro['nome'])
-                    ->setVeiculo($membro['veiculo'])
-                    ->setEstadia($membro['estadia'])
-                    ->setCamiseta($membro['camiseta'])
-                    ->setCalcado($membro['calcado'])
-                    ->setInscricao($inscricao)
-                    ->setPasseio($membro['passeio'])
-                    ->setRestaurante($membro['restaurante']);
-                $em->persist($bMembro);
+                if (empty($membro['id']) && $this->getVagasRestantes() > 0) {
+                    $bMembro = empty($membro['id']) ? new Membro() : $this->getDoctrine()->getRepository(Membro::class)->find($membro['id']);
+                    $bMembro
+                        ->setNome($membro['nome'])
+                        ->setVeiculo($membro['veiculo'])
+                        ->setEstadia($membro['estadia'])
+                        ->setCamiseta($membro['camiseta'])
+                        ->setCalcado($membro['calcado'])
+                        ->setInscricao($inscricao)
+                        ->setPasseio($membro['passeio'])
+                        ->setRestaurante($membro['restaurante']);
+                    $em->persist($bMembro);
+                } else {
+                    $acabouVagas = true;
+                }
             }
             $em->flush();
         }
 
-        return $this->redirectToRoute('edit-step-2', ['inscricao' => $inscricao->getId()]);
+        return $this->redirectToRoute('edit-step-2', ['inscricao' => $inscricao->getId(), 'acabouVagas' => $acabouVagas]);
     }
 
     /**
@@ -228,9 +241,11 @@ class DefaultController extends Controller
     public function addMembro(Request $request, Inscricao $inscricao)
     {
         $this->saveMembros($request, $inscricao);
-        $inscricao->setMembros(new ArrayCollection(array_merge([new Membro()], $inscricao->getMembros()->toArray())));
+        if ($this->getVagasRestantes() > 0) {
+            $inscricao->setMembros(new ArrayCollection(array_merge([new Membro()], $inscricao->getMembros()->toArray())));
+        }
 
-        return $this->editStep2($inscricao);
+        return $this->editStep2($inscricao, $this->getVagasRestantes() <= 0);
     }
 
     /**

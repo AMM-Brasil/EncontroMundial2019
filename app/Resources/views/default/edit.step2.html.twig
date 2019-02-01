@@ -75,6 +75,10 @@
         $(function () {
             ativarMudancaNome();
             ativarBotaoProximo();
+
+            {% if acabouVagas %}
+            alert('As vagas para o evento acabaram!');
+            {% endif %}
         });
     </script>
 {% endblock %}

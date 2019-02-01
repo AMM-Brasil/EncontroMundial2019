@@ -22,12 +22,25 @@
                     <h3>Inscrições</h3>
                 </div>
             </div>
+            {% if vagasRestantes > 0 %}
             <div class="row">
                 <div class="col">
                     <a href="{{ path('edit-step-1') }}" class="btn btn-primary btn-block btn-lg"><i class="fas fa-plus"></i> Nova inscrição</a>
                     <a href="{{ path('edit-select') }}" class="btn btn-secondary btn-block btn-lg"><i class="fas fa-edit"></i> Editar inscrição</a>
                 </div>
             </div>
+            <div class="row">
+                <div class="col text-center"><br>
+                    <h5 class="text-success">{{ vagasRestantes }} vagas restantes</h5>
+                </div>
+            </div>
+            {% else %}
+            <div class="row">
+                <div class="col text-center">
+                        <h4 class="text-danger">Acabaram as vagas!!</h4>
+                </div>
+            </div>    
+            {% endif %}
         </div>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
