@@ -35,14 +35,17 @@ class DeleteCommand extends Command
             $message = (new \Swift_Message('Inscrição cancelada'))
                 ->setFrom(['comunicacao@amm-brasil.org' => 'Comunicação AMM'])
                 ->setTo($inscricao->getEmail())
+                ->setCc('natanaelsimoes@gmail.com')
                 ->setBody(
                     sprintf(
                         'O prazo de 48h para o pagamento da inscrição da sua Regional expirou, portanto a inscrição foi cancelada abrindo vaga para novos interessados. '.
                             'Caso ainda queira participar, acesse o sistema novamente e realize uma nova inscrição.<br>'.
                             '<b>Data da inscrição:</b> %s<br>'.
-                            '<b>Expirou em:</b> %s',
+                            '<b>Expirou em:</b> %s<br>'.
+                            '<b>Membros</b>: %s',
                         $inscricao->getDataCriacao()->format('d/m/Y H:i:s'),
-                        $inscricao->getDataLimitePagamento()->format('d/m/Y H:i:s')
+                        $inscricao->getDataLimitePagamento()->format('d/m/Y H:i:s'),
+                        $inscricao->getMembros()->count()
                     ),
                     'text/html'
                 );
