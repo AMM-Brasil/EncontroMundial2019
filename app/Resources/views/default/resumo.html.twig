@@ -75,7 +75,33 @@
                             </td>
                         </tr>
                     </tfoot>
-                </table>                
+                </table>    
+                <h6>Comprovantes de Depósito/Transferência</h6>
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Arquivo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if (inscricao.comprovantes.count == 0) %}
+                            <tr>
+                                <td>Nenhum comprovante enviado até o momento.<br>
+                                        <span class="text-danger">Esta inscrição será cancelada caso você não insira um comprovante em até 48h! ({{ inscricao.dataLimitePagamento|date('d/m/Y H:i:s') }})</span>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                {% for comprovante in inscricao.comprovantes %}
+                                    <tr>
+                                        <td>
+                                            <a href="{{ asset('comprovantes/' ~ comprovante.arquivo) }}" target="_blank">Comprovante
+                                                {{ comprovante.data|date('d/m/Y H:i:s') }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>            
                 {% if inscricao.depositoIdentificado %}
                 <div class="alert alert-success">
                     Depósito confirmado pela tesouraria!
