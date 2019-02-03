@@ -14,7 +14,9 @@ class InscricaoRepository extends EntityRepository
         ->leftJoin('i.comprovantes', 'c')
         ->where('c.id is null')
         ->andWhere('i.dataLimitePagamento < :data')
+        ->andWhere('i.depositoIdentificado = :deposito')
         ->setParameter('data', new \DateTime())
+        ->setParameter('deposito', false)
         ->getQuery()->getResult();
     }
 }
