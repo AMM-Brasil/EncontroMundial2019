@@ -26,7 +26,7 @@ class DefaultController extends Controller
     {
         $membros = $this->getDoctrine()->getRepository(Membro::class)->findAll();
 
-        return 430 - count($membros);
+        return 830 - count($membros);
     }
 
     /**
