@@ -22,18 +22,18 @@
                     <h3>Inscrições</h3>
                 </div>
             </div>
-            {% if false %}
+            {% if vagasRestantes > 0 %}
             <div class="row">
                 <div class="col">
                     <a href="{{ path('edit-step-1') }}" class="btn btn-primary btn-block btn-lg"><i class="fas fa-plus"></i> Nova inscrição</a>
                     <a href="{{ path('edit-select') }}" class="btn btn-secondary btn-block btn-lg"><i class="fas fa-edit"></i> Editar inscrição</a>
                 </div>
             </div>
-            <div class="row">
+            <!--<div class="row">
                 <div class="col text-center"><br>
                     <h5 class="text-success">{{ vagasRestantes }} vagas restantes</h5>
                 </div>
-            </div>
+            </div>-->
             {% else %}
             <div class="row">
                 <div class="col text-center">

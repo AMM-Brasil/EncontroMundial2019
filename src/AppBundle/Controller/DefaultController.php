@@ -26,7 +26,7 @@ class DefaultController extends Controller
     {
         $membros = $this->getDoctrine()->getRepository(Membro::class)->findAll();
 
-        return 830 - count($membros);
+        return 1500 - count($membros);
     }
 
     /**
@@ -40,13 +40,17 @@ class DefaultController extends Controller
                 $this->getDoctrine()->getRepository(Inscricao::class)->find($id);
         } while (is_null($id) && !is_null($this->getDoctrine()->getRepository(Inscricao::class)->find($inscricao->getId())));
         if (is_null($inscricao)) {
-            return $this->render('default/fail.html.twig', [
+            return $this->render(
+                'default/fail.html.twig', [
                 'id' => $id,
-            ]);
+                ]
+            );
         } else {
-            return $this->render('default/edit.step1.html.twig', [
+            return $this->render(
+                'default/edit.step1.html.twig', [
                 'inscricao' => $inscricao,
-            ]);
+                ]
+            );
         }
     }
 
@@ -80,15 +84,19 @@ class DefaultController extends Controller
     {
         $catreBlocoA = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-A');
         $catreBlocoB = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-B');
-        $catreBlocoC = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-B');
+        $catreBlocoC = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-C');
+        $catreBlocoEXTRA = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco('CATRE-EXTRA');
 
-        return $this->render('default/edit.step2.html.twig', [
+        return $this->render(
+            'default/edit.step2.html.twig', [
             'inscricao' => $inscricao,
             'catreBlocoA' => $catreBlocoA,
             'catreBlocoB' => $catreBlocoB,
             'catreBlocoC' => $catreBlocoC,
+            'catreBlocoEXTRA' => $catreBlocoEXTRA,
             'acabouVagas' => $acabouVagas,
-        ]);
+            ]
+        );
     }
 
     /**
@@ -169,10 +177,26 @@ class DefaultController extends Controller
             $mailer->send($mTes);
         }
 
-        return $this->render('default/edit.step3.html.twig', [
+        return $this->render(
+            'default/edit.step3.html.twig', [
             'inscricao' => $inscricao,
             'form' => $form->createView(),
-        ]);
+            ]
+        );
+    }
+
+    private function hasCatreVagas($bloco)
+    {
+        if (strpos($bloco, 'CATRE') !== false) {
+            $catreBloco = $this->getDoctrine()->getRepository(Membro::class)->countByCatreBloco($bloco);
+            $vagasRestantes = $bloco == 'CATRE-C' ? 70 : $bloco == 'CATRE-EXTRA' ? 100 : 112;
+            if ($bloco == 'CATRE-A') {
+                $vagasRestantes-= 13;
+            }
+            $vagasRestantes -= $catreBloco;     
+            return $vagasRestantes > 0;
+        }
+        return true;
     }
 
     /**
@@ -180,30 +204,29 @@ class DefaultController extends Controller
      */
     public function saveMembros(Request $request, Inscricao $inscricao)
     {
-        $acabouVagas = false;
         if ($request->get('membro')) {
             $em = $this->getDoctrine()->getManager();
             foreach ($request->get('membro') as $membro) {
                 if ((empty($membro['id']) && $this->getVagasRestantes() > 0) || $membro['id']) {
                     $bMembro = empty($membro['id']) ? new Membro() : $this->getDoctrine()->getRepository(Membro::class)->find($membro['id']);
-                    $bMembro
-                        ->setNome($membro['nome'])
-                        ->setVeiculo($membro['veiculo'])
-                        ->setEstadia($membro['estadia'])
-                        ->setCamiseta($membro['camiseta'])
-                        ->setCalcado($membro['calcado'])
-                        ->setInscricao($inscricao)
-                        ->setPasseio($membro['passeio'])
-                        ->setRestaurante($membro['restaurante']);
-                    $em->persist($bMembro);
-                } else {
-                    $acabouVagas = true;
+                    if ($bMembro->getEstadia() != $membro['estadia'] && $this->hasCatreVagas($membro['estadia']) || $bMembro->getEstadia() == $membro['estadia']) {
+                        $bMembro
+                            ->setNome($membro['nome'])
+                            ->setVeiculo($membro['veiculo'])
+                            ->setEstadia($membro['estadia'])
+                            ->setCamiseta($membro['camiseta'])
+                            ->setCalcado($membro['calcado'])
+                            ->setInscricao($inscricao)
+                            ->setPasseio($membro['passeio'])
+                            ->setRestaurante($membro['restaurante']);
+                        $em->persist($bMembro);
+                    }
                 }
             }
             $em->flush();
         }
 
-        return $this->redirectToRoute('edit-step-2', ['inscricao' => $inscricao->getId(), 'acabouVagas' => $acabouVagas]);
+        return $this->redirectToRoute('edit-step-2', ['inscricao' => $inscricao->getId(), 'acabouVagas' => $this->getVagasRestantes() <= 0]);
     }
 
     /**
@@ -211,10 +234,12 @@ class DefaultController extends Controller
      */
     public function resumoInscricao(Request $request, Inscricao $inscricao)
     {
-        return $this->render('default/resumo.html.twig', [
+        return $this->render(
+            'default/resumo.html.twig', [
             'inscricao' => $inscricao,
             'success' => $request->get('success'),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -230,9 +255,11 @@ class DefaultController extends Controller
             $err = true;
         }
 
-        return $this->render('default/select.html.twig', [
+        return $this->render(
+            'default/select.html.twig', [
             'err' => $err,
-        ]);
+            ]
+        );
     }
 
     /**

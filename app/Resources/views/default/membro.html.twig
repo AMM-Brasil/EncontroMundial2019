@@ -49,7 +49,7 @@
                             (sem vagas)
                         {% else %}
                             (vagas restantes:
-                            {{ 112 - catreBlocoA }})
+                            {{ 112 - 13 - catreBlocoA }})
                         {% endif %}
                     </option>
                     <option value="CATRE-B" {% if membro.estadia == 'CATRE-B' %} selected="selected" {% elseif catreBlocoB >= 112 %} disabled="disabled" {% endif %}>CATRE: BLOCO B
@@ -66,6 +66,14 @@
                         {% else %}
                             (vagas restantes:
                             {{ 70 - catreBlocoC }})
+                        {% endif %}
+                    </option>
+                    <option value="CATRE-EXTRA" {% if membro.estadia == 'CATRE-EXTRA' %} selected="selected" {% elseif catreBlocoEXTRA >= 100 %} disabled="disabled" {% endif %}>CATRE: BLOCO EXTRA
+                        {% if membro.estadia != 'CATRE-EXTRA' and catreBlocoC >= 100 %}
+                            (sem vagas)
+                        {% else %}
+                            (vagas restantes:
+                            {{ 100 - catreBlocoEXTRA }})
                         {% endif %}
                     </option>
                     <option value="CAMPING" {% if membro.estadia == 'CAMPING' %} selected="selected" {% endif %}>Camping</option>
