@@ -208,7 +208,14 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
             foreach ($request->get('membro') as $membro) {
                 if ((empty($membro['id']) && $this->getVagasRestantes() > 0) || $membro['id']) {
-                    $bMembro = empty($membro['id']) ? new Membro() : $this->getDoctrine()->getRepository(Membro::class)->find($membro['id']);
+                    if (empty($membro['id'])) {
+                        $bMembro = new Membro();
+                        $inscricao->setDepositoIdentificado(false);
+                        $em->persist($inscricao);
+                        $em->flush();
+                    } else {
+                        $bMembro = $this->getDoctrine()->getRepository(Membro::class)->find($membro['id']);
+                    }
                     if ($bMembro->getEstadia() != $membro['estadia'] && $this->hasCatreVagas($membro['estadia']) || $bMembro->getEstadia() == $membro['estadia']) {
                         $bMembro
                             ->setNome($membro['nome'])
